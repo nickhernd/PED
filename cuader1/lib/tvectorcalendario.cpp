@@ -44,8 +44,11 @@ TVectorCalendario::TVectorCalendario(int tam){
 }
 
 TVectorCalendario::~TVectorCalendario(){
-    this->c = NULL;
-    this->tamano = 0;
+    if (c!=NULL) {
+        delete [] c;
+        this->c = NULL;
+        this->tamano = 0;
+    }
 }
 
 TVectorCalendario &TVectorCalendario::operator=(const TVectorCalendario &tvector) {
@@ -110,13 +113,14 @@ TCalendario TVectorCalendario::operator[](int pos) const {
 
 int TVectorCalendario::Ocupadas() {
     int cont = 0;
+    TCalendario cal; 
 
     if(this->c == NULL) {
         return cont;
     }
 
     for(int i  = 0; i < this->tamano; i++) {
-        if(this->c[i] != error)
+        if(!this->c[i].EsVacio())
             cont++;
     }
 
@@ -173,6 +177,7 @@ bool TVectorCalendario::Redimensionar(int tam){
         this->c = aux;
         this->tamano = tam;
 
+        delete vacio;
         return true;  
     }
     else{
@@ -182,6 +187,8 @@ bool TVectorCalendario::Redimensionar(int tam){
         (*this).~TVectorCalendario();   
         this->c = aux;
         this->tamano = tam;
+        
+        delete vacio;
 
         return true;  
     }
