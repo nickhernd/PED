@@ -130,22 +130,26 @@ bool TListaCalendario::operator!=(const TListaCalendario &tlista) {
     return true;
 }
 
-TListaCalendario TListaCalendario::operator+ (TListaCalendario &tlistacal) {
+TListaCalendario TListaCalendario::operator+(TListaCalendario &tlistacal) {
 
 }
 
 TListaCalendario TListaCalendario::Insertar(const TCalendario &tcal) {
 
     TListaPos auxp;
+    bool insertar = false;
+    TNodoCalendario *tnodo = new TNodoCalendario();
 
     if(primero == NULL) {
-        TNodoCalendario *tnodo = new TNodoCalendario();
         tnodo->c = tcal;
         primero = tnodo;
         tnodo->siguiente = NULL;
+        return(*this); //Comprobar que esta bien?
     }
 
-    while() {
-        this->primero
+    while(!insertar) {
+        if(tcal > this->primero && tnodo  )
     }
+
+    delete tnodo;
 }

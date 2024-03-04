@@ -17,7 +17,6 @@ main()
    cal2=cal1++;
    cout<<cal2<<endl;
    cout<<cal1<<endl;
-   
    cal2=++cal1;
    cout<<cal2<<endl;
    cout<<cal1<<endl;

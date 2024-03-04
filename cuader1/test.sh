@@ -14,13 +14,14 @@ tipo_de_prueba="tcalendario"
 tests_superados=0
 tests_totales=0
 test_number=0
-<< HOLA
+
 # Compilar y ejecutar cada archivo .cpp en src
 for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     # Obtener el número de test
     ((test_number+=1))
     
     formatted_test_number=$(printf "%02d" "$test_number")
+    echo "$tipo_de_prueba " "$formatted_test_number" 
 
     # Construir rutas de archivos
     main_file="$directorio_src/main.cpp"
@@ -55,15 +56,16 @@ for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     
     echo "************************************************************************************"
 done
-HOLA
+
 tipo_de_prueba="tvectorcalendario"
-
+test_number=0
 # Compilar y ejecutar cada archivo .cpp en src
 for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     # Obtener el número de test
     ((test_number+=1))
     
     formatted_test_number=$(printf "%02d" "$test_number")
+    echo "$tipo_de_prueba " "$formatted_test_number" 
 
     # Construir rutas de archivos
     main_file="$directorio_src/main.cpp"
@@ -99,6 +101,7 @@ for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     echo "************************************************************************************"
 done
 
+test_number=0
 << 'HOLA'
 tipo_de_prueba="tlistcalendario"
 # Compilar y ejecutar cada archivo .cpp en src
@@ -107,6 +110,7 @@ for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     ((test_number+=1))
     
     formatted_test_number=$(printf "%02d" "$test_number")
+    echo "$tipo_de_prueba " "$formatted_test_number" 
 
     # Construir rutas de archivos
     main_file="$directorio_src/main.cpp"

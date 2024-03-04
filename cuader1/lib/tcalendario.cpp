@@ -90,7 +90,7 @@ TCalendario::~TCalendario(){
     this->anyo = 1900;
 
     if(this->mensaje != NULL){
-        delete []this->mensaje;
+        delete [] this->mensaje;
     }
         
     this->mensaje = NULL;
@@ -113,26 +113,11 @@ int obtenerDiasEnMes(int mes, int anyo)  {
 
 // Operador + para incrementar días
 TCalendario TCalendario::operator+(int dias) {
+
     TCalendario tcalendario(*this);
 
-    while (dias > 0) {
-
-        int diasEnEsteMes = obtenerDiasEnMes(tcalendario.mes, tcalendario.anyo) - tcalendario.dia + 1;
-
-        if (dias >= diasEnEsteMes) {
-            dias = dias - diasEnEsteMes;
-            tcalendario.dia = 1;
-            if (tcalendario.mes == 12) {
-                tcalendario.mes = 1;
-                tcalendario.anyo++;
-            } else {
-                tcalendario.mes++;
-            }
-        } else {
-            // Incrementar dentro del mismo mes
-            tcalendario.dia += dias;
-            dias = 0;
-        }
+    for(int i = 0; i < dias; i++){
+        tcalendario++; 
     }
 
     return tcalendario;
@@ -140,163 +125,155 @@ TCalendario TCalendario::operator+(int dias) {
 
 TCalendario TCalendario::operator-(int dias)  {
     TCalendario tcalendario(*this);
-
-    int auxdia = 0;
-
-   while (dias > 0) {
-        if(dias > tcalendario.dia) {
-            auxdia = tcalendario.dia;
-            tcalendario.mes = tcalendario.mes -1;
-            if(tcalendario.mes == 0) {
-                tcalendario.mes = 12;
-                tcalendario.anyo = tcalendario.anyo -1;
-            }
-            tcalendario.dia = obtenerDiasEnMes(tcalendario.mes, tcalendario.anyo);
-            dias = dias - auxdia;
-        } else {
-            tcalendario.dia = tcalendario.dia - dias;
-            if(tcalendario.dia == 0) {
-                tcalendario.mes = tcalendario.mes - 1;
-                if(tcalendario.mes == 0) {
-                    tcalendario.mes = 12;
-                    tcalendario.anyo--;
-                }
-                tcalendario.dia = obtenerDiasEnMes(tcalendario.mes, tcalendario.anyo);
-            }
-            dias -= dias;
-        }
-    }
-
-    if(tcalendario.anyo < 1900) {
-        tcalendario.dia =1;
-        tcalendario.mes = 1;
-        tcalendario.anyo = 1900;
-        tcalendario.mensaje = NULL;
-    }
-
-    return tcalendario;
-}
-
-
-TCalendario TCalendario::operator++(int dias) {
-    TCalendario tcalendario(*this);
-
-    while (dias > 0) {
-
-        int diasEnEsteMes = obtenerDiasEnMes(mes, anyo) - dia + 1;
-
-        if (dias >= diasEnEsteMes) {
-            // Mover al siguiente mes
-            dias -= diasEnEsteMes;
-            dia = 1;
-            if (mes == 12) {
-                mes = 1;
-                anyo++;
-            } else {
-                mes++;
-            }
-        } else {
-            // Incrementar dentro del mismo mes
-            dia += dias;
-            dias = 0;
-        }
-    }
-
-    return tcalendario;
-}
-
-TCalendario & TCalendario::operator++() {
-
-        int dias = 1;
-
-        int diasEnEsteMes = obtenerDiasEnMes(this->mes, this->anyo) - this->dia + 1;
-
-        if (dias >= diasEnEsteMes) {
-            // Mover al siguiente mes
-            dias -= diasEnEsteMes;
-            this->dia = 1;
-            if (this->mes == 12) {
-                this->mes = 1;
-                this->anyo++;
-            } else {
-                this->mes++;
-            }
-        } else {
-            // Incrementar dentro del mismo mes
-            this->dia += dias;
-        }
     
+    for(int i = 0; i < dias; i++){   
+        tcalendario--;
+    }
 
+    if(!comprobarFecha(tcalendario.dia, tcalendario.mes, tcalendario.anyo)){
+        tcalendario.~TCalendario();
+    }
+
+    return tcalendario;
+}
+
+TCalendario TCalendario::operator++(int cantDias){
+    TCalendario tcalendario(*this);
+    if(mes == 2){
+        if(dia ==29 && esBisiesto(anyo)){
+                dia = 1;
+                mes ++;             
+        }else if(dia==28 && !esBisiesto(anyo)){
+                dia = 1;
+                mes++;
+        }
+        else{
+            dia++;
+        }        
+    }
+    else if(mes == 12 ){
+        if (dia == 31){
+            dia = 1;
+            anyo++;
+            mes = 1;
+            
+        }else{
+            dia++;
+        }
+    }
+    else if(mes ==4|| mes ==6 || mes==9 || mes==11){
+        if(dia==30){
+            mes ++;
+            dia=1;
+        }
+        else{
+            dia ++;
+        }
+    }
+    else if(mes ==1|| mes ==3 || mes==5 || mes==7 ||mes ==8 ||mes ==10 ){
+        if(dia==31){
+            dia=1;
+            mes ++;
+            
+        }
+        else{
+            dia ++;
+        }
+    }
+    return tcalendario;
+}
+
+TCalendario & TCalendario::operator++(){
+    if(mes == 2){
+        if(dia ==29 && esBisiesto(anyo)){
+                dia = 1;
+                mes ++;             
+        }else if(dia==28 && !esBisiesto(anyo)){
+                dia = 1;
+                mes++;
+        }
+        else{
+            dia++;
+        }        
+    }
+    else if(mes == 12 ){
+        if (dia == 31){
+            dia = 1;
+            anyo++;
+            mes = 1;
+            
+        }else{
+            dia++;
+        }
+    }
+    else if(mes ==4|| mes ==6 || mes==9 || mes==11){
+        if(dia==30){
+            mes ++;
+            dia=1;
+        }
+        else{
+            dia ++;
+        }
+    }
+    else if(mes ==1|| mes ==3 || mes==5 || mes==7 ||mes ==8 ||mes ==10 ){
+        if(dia==31){
+            dia=1;
+            mes ++;
+            
+        }
+        else{
+            dia ++;
+        }
+    }
     return *this;
 }
 
-TCalendario TCalendario::operator--(int dias) {
+TCalendario TCalendario::operator--(int cantDias){
     TCalendario tcalendario(*this);
-    int auxdia = 0;
-
-   while (dias > 0) {
-        if(dias > dia) {
-            auxdia = dia;
-            mes = mes -1;
-            if(mes == 0) {
-                mes = 12;
-                anyo = anyo -1;
-            }
-            dia = obtenerDiasEnMes(mes, anyo);
-            dias = dias - auxdia;
-        } else {
-            dia = dia - dias;
-            if(dia == 0) {
-                mes = mes - 1;
-                if(mes == 0) {
-                    mes = 12;
-                    anyo--;
-                }
-                dia = obtenerDiasEnMes(mes, anyo);
-            }
+    dia--;
+    if(dia == 0){
+        mes--;
+        if(mes == 0){
+            mes = 12;
+            anyo--;
         }
+        if(mes == 2 && !esBisiesto(this->anyo))
+            dia = 28;
+        else if(mes == 2 && esBisiesto(this->anyo))
+            dia = 29;
+        else if(mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 ||
+                mes == 10 || mes == 12)
+            dia = 31;
+        else dia = 30;
     }
 
-    if(anyo < 1900) {
-        dia = 1;
-        mes = 1;
-        anyo = 1900;
+    if(!comprobarFecha(this->dia, this->mes, this->anyo)){
+        this->~TCalendario();
     }
 
     return tcalendario;
 }
 
-TCalendario & TCalendario::operator--() {
-    int dias = 1;
-    int auxdia = 0;
-
-   while (dias > 0) {
-        if(dias > this->dia) {
-            auxdia = this->dia;
-            this->mes = this->mes -1;
-            if(this->mes == 0) {
-                this->mes = 12;
-                this->anyo = this->anyo -1;
-            }
-            this->dia = obtenerDiasEnMes(this->mes, this->anyo);
-            dias = dias - auxdia;
-        } else {
-            this->dia = this->dia - dias;
-            if(this->dia == 0) {
-                this->mes = this->mes - 1;
-                if(this->mes == 0) {
-                    this->mes = 12;
-                    this->anyo--;
-                }
-                this->dia = obtenerDiasEnMes(this->mes, this->anyo);
-            }
+TCalendario & TCalendario::operator--(){
+    dia--;
+    if(dia == 0){
+        mes--;
+        if(mes == 0){
+            mes = 12;
+            anyo--;
         }
+        if(mes == 2 && !esBisiesto(this->anyo))
+            dia = 28;
+        else if(mes == 2 && esBisiesto(this->anyo))
+            dia = 29;
+        else if(mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 ||
+                mes == 10 || mes == 12)
+            dia = 31;
+        else dia = 30;
     }
 
-    if(this->anyo < 1900) {
-        this->dia = 1;
-        this->mes = 1;
-        this->anyo = 1900;
+    if(!comprobarFecha(this->dia, this->mes, this->anyo)){
+        this->~TCalendario();
     }
 
     return *this;
@@ -335,14 +312,14 @@ bool TCalendario::ModMensaje(char * mensaje){
 }
 
 bool TCalendario::operator==(TCalendario &tcalendario) {
-    if(this->dia == tcalendario.dia && this->mes == tcalendario.mes && this->anyo == tcalendario.anyo && strcpy(this->mensaje, tcalendario.mensaje)) {
+    if(this->dia == tcalendario.dia && this->mes == tcalendario.mes && this->anyo == tcalendario.anyo && strcmp(this->mensaje, tcalendario.mensaje)) {
         return true;
     }
     return false;
 }
 
 bool TCalendario::operator!=(TCalendario &tcalendario) {
-    if(this->dia == tcalendario.dia && this->mes == tcalendario.mes && this->anyo == tcalendario.anyo && strcpy(this->mensaje, tcalendario.mensaje)) {
+    if(this->dia == tcalendario.dia && this->mes == tcalendario.mes && this->anyo == tcalendario.anyo && strcmp(this->mensaje, tcalendario.mensaje)) {
         return false;
     }
     return true;
