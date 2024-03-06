@@ -59,7 +59,9 @@ TCalendario::TCalendario(TCalendario &tcalendario) {
             this->mensaje = new char[strlen(tcalendario.mensaje)+1];
             strcpy(this->mensaje, tcalendario.mensaje);
         }
+
         else this->mensaje = NULL;
+
     } else {
         this->dia = 1;
         this->mes = 1;
@@ -78,6 +80,7 @@ TCalendario &TCalendario::operator=(const TCalendario &tcalendario) {
             this->mensaje = new char[strlen(tcalendario.mensaje)+1];
             strcpy(this->mensaje, tcalendario.mensaje);
         }
+
         else this->mensaje = NULL;
     }
     
@@ -87,13 +90,10 @@ TCalendario &TCalendario::operator=(const TCalendario &tcalendario) {
 TCalendario::~TCalendario(){
     this->dia = 1;
     this->mes = 1;
-    this->anyo = 1900;
-
-    if(this->mensaje != NULL){
-        delete [] this->mensaje;
-    }
-        
+    this->anyo = 1900;    
     this->mensaje = NULL;
+
+    delete [] this->mensaje;
 }
 
 // Función privada para obtener el número de días en un mes
@@ -142,7 +142,7 @@ TCalendario TCalendario::operator++(int cantDias){
     if(mes == 2){
         if(dia ==29 && esBisiesto(anyo)){
                 dia = 1;
-                mes ++;             
+                mes++;             
         }else if(dia==28 && !esBisiesto(anyo)){
                 dia = 1;
                 mes++;
@@ -161,23 +161,23 @@ TCalendario TCalendario::operator++(int cantDias){
             dia++;
         }
     }
-    else if(mes ==4|| mes ==6 || mes==9 || mes==11){
+    else if(mes == 4 || mes == 6 || mes== 9 || mes == 11){
         if(dia==30){
-            mes ++;
+            mes++;
             dia=1;
         }
         else{
-            dia ++;
+            dia++;
         }
     }
-    else if(mes ==1|| mes ==3 || mes==5 || mes==7 ||mes ==8 ||mes ==10 ){
+    else if(mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 8 || mes == 10 ){
         if(dia==31){
             dia=1;
-            mes ++;
+            mes++;
             
         }
         else{
-            dia ++;
+            dia++;
         }
     }
     return tcalendario;
@@ -326,33 +326,28 @@ bool TCalendario::operator!=(TCalendario &tcalendario) {
 }
 
 bool TCalendario::operator> ( TCalendario &tcalendario){
-    if(this->anyo > tcalendario.anyo)
+    if (anyo != tcalendario.anyo)
+        return anyo > tcalendario.anyo;
+
+    if (mes != tcalendario.mes)
+        return mes > tcalendario.mes;
+
+    if (dia != tcalendario.dia)
+        return dia > tcalendario.dia;
+
+    if (mensaje == nullptr && tcalendario.mensaje != nullptr)
         return true;
-    else if(this->anyo == tcalendario.anyo && this->mes > tcalendario.mes )
-        return true;
-    else if(this->anyo == tcalendario.anyo && this->mes == tcalendario.mes && this->dia > tcalendario.dia)
-        return true;
-    else if((this->anyo == tcalendario.anyo && this->mes == tcalendario.mes && this->dia == tcalendario.dia)
-            && this->mensaje != tcalendario.mensaje){
-        if(this->mensaje == NULL)
-            return false;
-        else if(tcalendario.mensaje == NULL)
-            return true;
-        else{
-            if(strcmp(this->mensaje, tcalendario.mensaje) == 0)
-                return false;
-            else if(strcmp(this->mensaje, tcalendario.mensaje) > 0)
-                return true;
-            else return false;
-        }
-    }
+
+    if (mensaje != nullptr && tcalendario.mensaje != nullptr)
+        return strcmp(mensaje, tcalendario.mensaje) > 0;
+
     return false;
 }
 
 bool TCalendario::operator< ( TCalendario &tcalendario){
-    if((*this)==tcalendario)
+    if((*this) == tcalendario)
         return false;
-    else return !(*this>tcalendario);
+    else return !(*this > tcalendario);
 }
 
 ostream &operator<<(ostream &os, const TCalendario &tcalendario){

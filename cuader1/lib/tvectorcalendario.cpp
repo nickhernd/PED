@@ -149,7 +149,7 @@ void TVectorCalendario::MostrarMensajes(int dia, int mes,int anyo) {
                 cout << c[i];
             }
             if(i < tamano-1) {
-                cout << ", ";
+                cout << "z, ";
             }
         }
         cout << "]";
