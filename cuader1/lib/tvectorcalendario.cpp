@@ -137,19 +137,21 @@ bool TVectorCalendario::ExisteCal(TCalendario &calendario) {
 }
 
 void TVectorCalendario::MostrarMensajes(int dia, int mes,int anyo) {
-
+    bool coma = false;
     TCalendario *calendario = new TCalendario(dia, mes, anyo, NULL);
 
-    if(comprobarFecha(dia, mes, anyo) || c == NULL) {
+    if(!comprobarFecha(dia, mes, anyo) || c == NULL) {
         cout << "[]"; 
     } else {
         cout << "[";
         for (int i = 0; i < tamano; i++) {
-            if(*calendario > c[i] || *calendario == c[i]) {
+            if(*calendario < c[i] || *calendario == c[i]) {
                 cout << c[i];
+                coma = true;
             }
-            if(i < tamano-1) {
-                cout << "z, ";
+            if(i < tamano-1 && coma == true) {
+                cout << ", ";
+                coma = false;
             }
         }
         cout << "]";

@@ -135,21 +135,52 @@ TListaCalendario TListaCalendario::operator+(TListaCalendario &tlistacal) {
 }
 
 TListaCalendario TListaCalendario::Insertar(const TCalendario &tcal) {
-
-    TListaPos auxp;
     bool insertar = false;
+    TListaPos inicial = Primera();
+    TlistaPos tsiguiente;
     TNodoCalendario *tnodo = new TNodoCalendario();
 
     if(primero == NULL) {
         tnodo->c = tcal;
         primero = tnodo;
         tnodo->siguiente = NULL;
-        return(*this); //Comprobar que esta bien?
+        return(*this);
     }
 
-    while(!insertar) {
-        if(tcal > this->primero && tnodo  )
+    tnodo->c=tcal;
+    if(primero->siguiente == NULL) {
+        
+        if(inicial->c > tcal) {
+            primero = nodo;
+            tnodo->siguiente = inicial.pos;
+            return true;
+        } else {
+            inicial.pos->siguiente = nodo;
+            tnodo->siguiente = NULL;
+            return true;
+        }
+    } else {
+        while(inicial.pos != NULL) {
+            tsiguiente = inicial.pos->siguiente;
+            if(inicial.pos->c < tcal) {
+                if(tsiguiente == NULL) {
+                    inicial.pos->siguiente = tnodo;
+                    tnodo->siguiente = NULL;
+                    return true;
+                } else {
+                    if(tsiguiente->c > tcal) {
+                        inicial.pos->siguiente = tnodo;
+                        tnodo->siguiente = tsiguiente;
+                        return true;
+                    }
+                }
+     
+            } 
+            inicial.pos = inicial.pos->siguiente;
+        }
     }
+    
 
     delete tnodo;
+    return false;
 }

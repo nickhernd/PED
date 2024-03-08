@@ -57,7 +57,7 @@ class TListaCalendario {
         TCalendario Obtener(TListaPos &)
         bool Buscar(TCalendario &);
         int Longitud();
-        TListaPos Primera();
+        TListaPos Primera() {return this->primero;};
         TListaPos Ultima();
         TListaCalendario SumarSubl (int I_L1, int F_L1, TListaCalendario & L2, int I_L2, int F_L2);
         TListaCalendario ExtraerRango (int n1, int n2);
