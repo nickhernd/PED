@@ -130,10 +130,6 @@ bool TListaCalendario::operator!=(const TListaCalendario &tlista) {
     return true;
 }
 
-TListaCalendario TListaCalendario::operator+(TListaCalendario &tlistacal) {
-
-}
-
 TListaCalendario TListaCalendario::Insertar(const TCalendario &tcal) {
     bool insertar = false;
     TListaPos inicial = Primera();
@@ -180,7 +176,60 @@ TListaCalendario TListaCalendario::Insertar(const TCalendario &tcal) {
         }
     }
     
-
     delete tnodo;
+    return false;
+}
+
+bool TListaCalendario::Borrar(const TCalendario &tcal){
+    TNodoCalendario *aux = this->primero;
+    TNodoCalendario *eliminar;
+
+    while(aux != NULL){  //Mientras apuntamos a un nodo..
+        //Eliminar primer nodo
+        if(this->primero->c == tcal){
+            eliminar = this->primero;
+            this->primero = this->primero->siguiente; //, si el siguiente es null la lista se queda vacia
+            delete eliminar;
+            return true;  //Solo puede haber una ocurrencia
+        }
+
+        else{
+            //eliminar nodo intermedio
+            if(aux->siguiente != NULL && aux->siguiente->c == tcal){
+                eliminar = aux->siguiente;
+                aux->siguiente = aux->siguiente->siguiente; //Salteamos el nodo intermedio
+                delete eliminar;
+                return true;
+            }
+
+            else aux = aux->siguiente;
+        }  
+    }
+
+    return false;
+}
+
+TListaCalendario TListaCalendario::operator+(TListaCalendario &tlistacal) {
+    TListaCalendario *tlista = new TListaCalendario(*this);
+
+    for(TListaPos i = tlistacal.Primera(); !i.EsVacia(); i = i.Siguiente())
+        tlista->Insertar(i.pos->c);
+
+    return (*tlista);
+}
+
+TListaCalendario TListaCalendario::operator-(TListaCalendario &tlistacal){
+    TListaCalendario *tlist = new TListaCalendario(*this);
+
+    for(TListaPos i = tlistacal.Primera(); !i.EsVacia(); i = i.Siguiente())
+        tlist->Borrar(i.pos->c);
+
+    return (*tlist);
+}
+
+bool TListaCalendario::EsVacia() const{
+    if(this->primero == NULL)
+        return true;
+    
     return false;
 }

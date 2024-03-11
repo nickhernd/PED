@@ -41,7 +41,6 @@ for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     fi
 
     # Ejecutar el programa y almacenar la salida en un archivo temporal
-    valgrind --leak-check=full ./tad
     ./tad > "$output_file"
     ((tests_totales+=1))
 
@@ -102,7 +101,6 @@ for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
 done
 
 test_number=0
-<< 'HOLA'
 tipo_de_prueba="tlistcalendario"
 # Compilar y ejecutar cada archivo .cpp en src
 for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
@@ -130,7 +128,6 @@ for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     fi
 
     # Ejecutar el programa y almacenar la salida en un archivo temporal
-    valgrind ./tad
     ./tad > "$output_file"
     ((tests_totales+=1))
 
@@ -145,8 +142,6 @@ for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     
     echo "************************************************************************************"
 done
-HOLA
-
 
 # Mostrar el resumen final
 echo "Resumen Final: Gilipollas que vas a suspender. Superados " "$tests_superados" "/" "$tests_totales"
