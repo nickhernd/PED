@@ -19,15 +19,15 @@ class TNodoCalendario {
         TNodoCalendario & operator=(TNodoCalendario &);
 };
 
-class TlistaPos {
+class TListaPos {
     private:
         TNodoCalendario *pos;
 
     public:
-        TlistaPos();
-        TlistaPos(TlistaPos &);
-        ~TlistaPos();
-        TlistaPos & operator=(TlistaPos &);
+        TListaPos();
+        TListaPos(TListaPos &);
+        ~TListaPos();
+        TListaPos & operator=(TListaPos &);
 
         bool operator==(TListaPos &);
         bool operator!=(TListaPos &);
@@ -45,19 +45,19 @@ class TListaCalendario {
         ~TListaCalendario();
         TListaCalendario & operator=(TListaCalendario &);
 
-        bool operator==(TListaCalendario &)
+        bool operator==(TListaCalendario &);
         TListaCalendario operator+ (TListaCalendario &);
         TListaCalendario operator- (TListaCalendario &);
-        Bool Insertar(TCalendario &);
+        bool Insertar(TCalendario &);
         bool Borrar(TCalendario &);
         bool Borrar (TListaPos &);
         bool Borrar(int,int,int);
         bool EsVacia();
 
-        TCalendario Obtener(TListaPos &)
+        TCalendario Obtener(TListaPos &);
         bool Buscar(TCalendario &);
         int Longitud();
-        TListaPos Primera() {return this->primero;};
+        TListaPos Primera();
         TListaPos Ultima();
         TListaCalendario SumarSubl (int I_L1, int F_L1, TListaCalendario & L2, int I_L2, int F_L2);
         TListaCalendario ExtraerRango (int n1, int n2);

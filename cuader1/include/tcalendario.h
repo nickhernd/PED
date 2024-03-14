@@ -41,7 +41,6 @@ class TCalendario{
         bool operator>(TCalendario &);
         bool operator<(TCalendario &);
 
-
         //TCalendario vacío
         bool EsVacio();
         

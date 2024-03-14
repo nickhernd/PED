@@ -343,5 +343,3 @@ ostream &operator<<(ostream &os, const TCalendario &tcalendario){
     
     return os;
 }
-
-
