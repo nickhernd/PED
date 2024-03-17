@@ -8,6 +8,9 @@
 using namespace std;
 
 class TNodoCalendario {
+    friend class TListaPos;
+    friend class TListaCalendario;
+
     private:
         TCalendario c; 
         TNodoCalendario *siguiente;
@@ -16,49 +19,55 @@ class TNodoCalendario {
         TNodoCalendario();
         TNodoCalendario(TNodoCalendario &);
         ~TNodoCalendario();
-        TNodoCalendario & operator=(TNodoCalendario &);
+        TNodoCalendario & operator=(const TNodoCalendario &);
 };
 
 class TListaPos {
+    friend class TNodoCalendario;
+    friend class TListaCalendario;
+
     private:
         TNodoCalendario *pos;
 
     public:
         TListaPos();
-        TListaPos(TListaPos &);
+        TListaPos(const TListaPos &);
         ~TListaPos();
         TListaPos & operator=(TListaPos &);
 
-        bool operator==(TListaPos &);
-        bool operator!=(TListaPos &);
-        TListaPos Siguiente();
+        bool operator==(const TListaPos &) const;
+        bool operator!=(const TListaPos &) const;
+        TListaPos Siguiente() const;
         bool EsVacia();
 };
 
 class TListaCalendario {
+    friend class TNodoCalendario;
+    friend class TListaPos;
+
     private:
         TNodoCalendario *primero;
 
     public:
         TListaCalendario();
-        TListaCalendario(TListaCalendario &);
+        TListaCalendario(const TListaCalendario &);
         ~TListaCalendario();
-        TListaCalendario & operator=(TListaCalendario &);
+        TListaCalendario & operator=(const TListaCalendario &);
 
-        bool operator==(TListaCalendario &);
-        TListaCalendario operator+ (TListaCalendario &);
-        TListaCalendario operator- (TListaCalendario &);
-        bool Insertar(TCalendario &);
+        bool operator==(const TListaCalendario &) const;
+        TListaCalendario operator+(TListaCalendario &);
+        TListaCalendario operator-(TListaCalendario &);
+        bool Insertar(const TCalendario &);
         bool Borrar(TCalendario &);
-        bool Borrar (TListaPos &);
+        bool Borrar (const TListaPos &);
         bool Borrar(int,int,int);
-        bool EsVacia();
+        bool EsVacia() const;
 
         TCalendario Obtener(TListaPos &);
         bool Buscar(TCalendario &);
-        int Longitud();
-        TListaPos Primera();
-        TListaPos Ultima();
+        int Longitud() const;
+        TListaPos Primera() const;
+        TListaPos Ultima() const;
         TListaCalendario SumarSubl (int I_L1, int F_L1, TListaCalendario & L2, int I_L2, int F_L2);
         TListaCalendario ExtraerRango (int n1, int n2);
 

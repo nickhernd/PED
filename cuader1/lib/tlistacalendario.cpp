@@ -8,7 +8,7 @@ TNodoCalendario::TNodoCalendario(): c() {
     this->siguiente = NULL;
 }
 
-TNodoCalendario::TNodoCalendario(const TNodoCalendario &tnodo) : c(tnodo.c) {
+TNodoCalendario::TNodoCalendario(TNodoCalendario &tnodo) : c(tnodo.c) {
     this->siguiente = tnodo.siguiente;
 }
 
@@ -35,49 +35,35 @@ TListaPos::TListaPos(const TListaPos &tlistapos){
     this->pos = tlistapos.pos;
 }
 
-TListaPos::~TlistaPos() {
-    this->pos.~TNodoCalendario();
+TListaPos::~TListaPos() {
+    this->pos = NULL;
 }
 
-TListaPos & TListaPos::operator=(const TListaPos &tlistapos){
-    if(this =! &tlistapos) {
-        (*this).~TListaPos();
+TListaPos & TListaPos::operator=(TListaPos &tlistapos){
+    if(this != &tlistapos){
         this->pos = tlistapos.pos;
     }
 
     return (*this);
 }
 
-bool TListaPos::operator==(const TListaPos &tlista) {
-    
-    if(tlista.pos.size() == this->pos.size()) {
-        for(int i = 0; i < tlista.size(); i++) {
-            if(tlista.pos[i] != this->pos[i]) {
-                return false;
-            }
-        }    
+bool TListaPos::operator==(const TListaPos &tlista) const{
+    if(this->pos == tlista.pos)
         return true;
-    } 
-    
     return false;
 }
 
-bool TListaPos::operator!=(const TListaPos &tlista) {
-    if(tlista.pos == this->pos) {
-        return false;
-    }
-
-    return true;
+bool TListaPos::operator!=(const TListaPos &tlista) const{ 
+    return !(*this == tlista);
 }
 
-TListaPos TListaPos::Siguiente() {
+TListaPos TListaPos::Siguiente() const{
+    TListaPos tlistapos;
+    
+    if(this->pos->siguiente != NULL)
+        tlistapos.pos = this->pos->siguiente;
 
-    TListaPos tlista;
-    if(this->pos->siguiente != NULL) 
-        return pos->siguiente;
-
-    return tlista;
-
+    return tlistapos;
 }
 
 bool TListaPos::EsVacia() {
@@ -87,8 +73,6 @@ bool TListaPos::EsVacia() {
 
     return false;
 }
-
-
 
 //TLISTACALENDARIO
 TListaCalendario::TListaCalendario() {
@@ -103,8 +87,8 @@ TListaCalendario::~TListaCalendario() {
     delete primero;
 }
 
-TListaCalendario & operator=(TListaCalendario &tlistacal) {
-    if(this =! &tlistacal) {
+TListaCalendario & TListaCalendario::operator=(const TListaCalendario &tlistacal) {
+    if(this != &tlistacal) {
         (*this).~TListaCalendario();
         this->primero = tlistacal.primero;
     }
@@ -112,25 +96,24 @@ TListaCalendario & operator=(TListaCalendario &tlistacal) {
     return (*this);
 } 
 
-bool TListaCalendario::operator==(TListaCalendario &tlistacal) {
-    if(tlistacal.primero.size() == this->primera.size()) {
-        for(int i = 0; i < tlistacal.size(); i++) {
-            if(tlistacal.primera[i] != this->primera[i]) {
-                return false;
+bool TListaCalendario::operator==(const TListaCalendario &tlistacal) const{
+    TListaPos actual = this->Primera();
+    TListaPos actual_Tlista = tlistacal.Primera();
+
+    if(this->Longitud() == tlistacal.Longitud()){
+        do{
+            if(!actual.EsVacia() && !actual_Tlista.EsVacia()){
+                if(actual.pos->c != actual_Tlista.pos->c)
+                    return false;
+
+                actual = actual.Siguiente();
+                actual_Tlista = actual_Tlista.Siguiente();
             }
-        }    
+        }while(!actual.EsVacia());
+
         return true;
-    } 
-    
-    return false;
-}
-
-bool TListaCalendario::operator!=(const TListaCalendario &tlista) {
-    if(tlista.primero == this->primero) {
-        return false;
     }
-
-    return true;
+    return false;
 }
 
 TListaCalendario TListaCalendario::Insertar(const TCalendario &tcal) {
@@ -182,7 +165,7 @@ TListaCalendario TListaCalendario::Insertar(const TCalendario &tcal) {
     return false;
 }
 
-bool TListaCalendario::Borrar(const TCalendario &tcal){
+bool TListaCalendario::Borrar(TCalendario &tcal){
     TNodoCalendario *aux = this->primero;
     TNodoCalendario *borrar;
 
@@ -265,10 +248,10 @@ bool TListaCalendario::EsVacia() const{
 }
 
 TCalendario TListaCalendario::Obtener(TListaPos &tlista) {
-
+    return NULL;
 }
 
-int TListaCalendario::Longitud() {
+int TListaCalendario::Longitud() const{
     int tam = 0;
     TNodoCalendario *auxp = this->primero;
 
@@ -290,7 +273,7 @@ TListaPos TListaCalendario::Primera() const{
     }
 }
 
-TListaPos TListaCalendario::Ultima() {
+TListaPos TListaCalendario::Ultima() const{
     TNodoCalendario *auxp = this->primero;
     TNodoCalendario *auxpsig = auxp->siguiente;
 
