@@ -71,6 +71,8 @@ TCalendario::TCalendario(TCalendario &tcalendario) {
 }
 
 TCalendario &TCalendario::operator=(const TCalendario &tcalendario) {
+    //comprobar dirección de memoria
+
     if(comprobarFecha(tcalendario.dia, tcalendario.mes, tcalendario.anyo)){
         this->dia = tcalendario.dia;
         this->mes = tcalendario.mes;

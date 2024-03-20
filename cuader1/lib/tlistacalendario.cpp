@@ -39,7 +39,7 @@ TListaPos::~TListaPos() {
     this->pos = NULL;
 }
 
-TListaPos & TListaPos::operator=(TListaPos &tlistapos){
+TListaPos & TListaPos::operator=(const TListaPos &tlistapos){
     if(this != &tlistapos){
         this->pos = tlistapos.pos;
     }
@@ -50,6 +50,7 @@ TListaPos & TListaPos::operator=(TListaPos &tlistapos){
 bool TListaPos::operator==(const TListaPos &tlista) const{
     if(this->pos == tlista.pos)
         return true;
+
     return false;
 }
 
@@ -98,16 +99,16 @@ TListaCalendario & TListaCalendario::operator=(const TListaCalendario &tlistacal
 
 bool TListaCalendario::operator==(const TListaCalendario &tlistacal) const{
     TListaPos actual = this->Primera();
-    TListaPos actual_Tlista = tlistacal.Primera();
+    TListaPos actual_compara = tlistacal.Primera();
 
     if(this->Longitud() == tlistacal.Longitud()){
         do{
-            if(!actual.EsVacia() && !actual_Tlista.EsVacia()){
-                if(actual.pos->c != actual_Tlista.pos->c)
+            if(!actual.EsVacia() && !actual_compara.EsVacia()){
+                if(actual.pos->c != actual_compara.pos->c)
                     return false;
 
                 actual = actual.Siguiente();
-                actual_Tlista = actual_Tlista.Siguiente();
+                actual_compara = actual_compara.Siguiente();
             }
         }while(!actual.EsVacia());
 
@@ -116,47 +117,46 @@ bool TListaCalendario::operator==(const TListaCalendario &tlistacal) const{
     return false;
 }
 
-TListaCalendario TListaCalendario::Insertar(const TCalendario &tcal) {
-    bool insertar = false;
-    TlistaPos tsiguiente;
+bool TListaCalendario::Insertar(TCalendario &tcal) {
+    TNodoCalendario *tsiguiente = new TNodoCalendario();
     TNodoCalendario *tnodo = new TNodoCalendario();
 
     if(this->primero == NULL) {
         tnodo->c = tcal;
         this->primero = tnodo;
         tnodo->siguiente = NULL;
-        return(*this);
+        return true;
     }
 
     tnodo->c=tcal;
     if(primero->siguiente == NULL) {
-        if(tnodo->c > tcal) {
+        if(this->primero->c > tcal) {
             this->primero = tnodo;
-            tnodo->siguiente = tnodo.pos;
+            tnodo->siguiente = this->primero;
             return true;
         } else {
-            tnodo.pos->siguiente = tnodo;
+            tnodo->siguiente = tnodo;
             tnodo->siguiente = NULL;
             return true;
         }
     } else {
-        while(tnodo.pos != NULL) {
-            tsiguiente = tnodo.pos->siguiente;
-            if(tnodo.pos->c < tcal) {
+        while(tnodo != NULL) {
+            tsiguiente = tnodo->siguiente;
+            if(tnodo->c < tcal) {
                 if(tsiguiente == NULL) {
-                    tnodo.pos->siguiente = tnodo;
+                    tnodo->siguiente = tnodo;
                     tnodo->siguiente = NULL;
                     return true;
                 } else {
                     if(tsiguiente->c > tcal) {
-                        tnodo.pos->siguiente = tnodo;
+                        tnodo->siguiente = tnodo;
                         tnodo->siguiente = tsiguiente;
                         return true;
                     }
                 }
      
             } 
-            tnodo.pos = tnodo.pos->siguiente;
+            tnodo = tnodo->siguiente;
         }
     }
     
@@ -191,7 +191,7 @@ bool TListaCalendario::Borrar(TCalendario &tcal){
     return false;
 }
 
-bool TListaCalendario::Borrar(const TListaPos &tlista) {
+bool TListaCalendario::Borrar(const TListaPos &tlistapos) {
 
     return false;
 }
@@ -201,23 +201,21 @@ bool TListaCalendario::Borrar(int dia, int mes, int anyo) {
     TNodoCalendario *borrar;
 
     while(auxp != NULL) {
-        if(this->primero->c.Dia() == dia && this->primero->c.Mes() == mes && this->primero->c.Anyo == Anyo) {
+        if(this->primero->c.Dia() == dia && this->primero->c.Mes() == mes && this->primero->c.Anyo() == anyo) {
             borrar = this->primero;
-            this->primero = this->siguiente;
+            this->primero = auxp->siguiente;
             delete borrar;
             return true;
         } else {
-            if(auxp->siguiente != NULL && auxp->siguiente->c.Dia == dia && auxp->siguiente->c.Mes == mes && auxp->siguiente->c.Anyo == Anyo) {
+            if(auxp->siguiente != NULL && auxp->siguiente->c.Dia() == dia && auxp->siguiente->c.Mes() == mes && auxp->siguiente->c.Anyo() == anyo) {
                 borrar = auxp->siguiente;
                 auxp->siguiente = auxp->siguiente->siguiente; 
                 delete borrar;
                 return true;
             } else auxp = auxp->siguiente;
         }
-    
-    return false;
-
     }
+    return false;
 }
 
 TListaCalendario TListaCalendario::operator+(TListaCalendario &tlistacal) {
@@ -248,7 +246,17 @@ bool TListaCalendario::EsVacia() const{
 }
 
 TCalendario TListaCalendario::Obtener(TListaPos &tlista) {
-    return NULL;
+    TListaPos actual = this->Primera();
+
+    while(!actual.EsVacia()) {
+        if(actual == tlista) {
+            return actual.pos->c;
+        }
+
+        actual = actual.Siguiente();
+    }
+
+    return TCalendario();
 }
 
 int TListaCalendario::Longitud() const{
@@ -274,33 +282,38 @@ TListaPos TListaCalendario::Primera() const{
 }
 
 TListaPos TListaCalendario::Ultima() const{
-    TNodoCalendario *auxp = this->primero;
-    TNodoCalendario *auxpsig = auxp->siguiente;
+    TListaPos tposact;
+    TListaPos tpossig;
 
-    while(auxpsig != NULL) {
-        auxp = auxp->siguiente;
-        auxpsig = auxp->siguiente;
-    }
+    do {
+        tposact.pos = this->primero;
+        tpossig.pos = this->primero->siguiente;
+    }  while(tpossig.pos != NULL);
 
-    delete auxpsig;
-    return auxp;
+    return tpossig;
 }
 
 TListaCalendario TListaCalendario::SumarSubl(int I_L1, int F_L1, TListaCalendario & L2, int I_L2, int F_L2) {
-    return NULL;
+    return (*this);
 }
 
 TListaCalendario TListaCalendario::ExtraerRango(int n1, int n2) {
-    return NULL;
+    return (*this);
 }
 
-friend ostream & operator<<(ostream &os, TListaCalendario &tlistacal) {
-    TNodoCalendario *auxp = this->primero;
-    
+ostream & operator<<(ostream &os, TListaCalendario &tlistacal) {
+    TListaPos actual = tlistacal.Primera();
+
     os << "<";
-    while(auxp->siguiente != NULL) {
-        os << auxp->c;
+    while(!actual.EsVacia()) {
+        os << tlistacal.Obtener(actual);
+
+        if(actual !=  tlistacal.Ultima()) os << " "; 
+
+        actual = actual.Siguiente();
     }
     os << ">";
+
+    return os;
 }
 
