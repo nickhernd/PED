@@ -3,6 +3,7 @@
 
 using namespace std;
 
+//CAMBIOS MÓVIL
 //TNODOCALENDARIO
 TNodoCalendario::TNodoCalendario(): c() {
     this->siguiente = NULL;
