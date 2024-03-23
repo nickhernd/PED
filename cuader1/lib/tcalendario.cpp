@@ -279,7 +279,7 @@ bool TCalendario::ModMensaje(char * mensaje){
     return false;
 }
 
-bool TCalendario::operator==(TCalendario &tcalendario) {
+bool TCalendario::operator==(const TCalendario &tcalendario) const {
     if(this->dia == tcalendario.dia && this->mes == tcalendario.mes && this->anyo == tcalendario.anyo) {
         if(this->mensaje == NULL && tcalendario.mensaje == NULL) return true;
         if(this->mensaje == NULL || tcalendario.mensaje == NULL) return false;
@@ -288,14 +288,14 @@ bool TCalendario::operator==(TCalendario &tcalendario) {
     return false;
 }
 
-bool TCalendario::operator!=(TCalendario &tcalendario) {
+bool TCalendario::operator!=(const TCalendario &tcalendario) const{
     if(this->dia == tcalendario.dia && this->mes == tcalendario.mes && this->anyo == tcalendario.anyo && strcmp(this->mensaje, tcalendario.mensaje)) {
         return false;
     }
     return true;
 }
 
-bool TCalendario::operator> ( TCalendario &tcalendario){
+bool TCalendario::operator> (const TCalendario &tcalendario) const{
     if (this->anyo != tcalendario.anyo)
         return this->anyo > tcalendario.anyo;
 
@@ -317,7 +317,7 @@ bool TCalendario::operator> ( TCalendario &tcalendario){
     return false;
 }
 
-bool TCalendario::operator< ( TCalendario &tcalendario){
+bool TCalendario::operator< ( const TCalendario &tcalendario) const{
     if((*this) == tcalendario)
         return false;
     else return !(*this > tcalendario);

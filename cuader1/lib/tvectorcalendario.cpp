@@ -3,11 +3,11 @@
 
 using namespace std;
 
-bool TVectorCalendario::esBisiesto(int anyo)  {
+bool TVectorCalendario::esBisiesto(int anyo) const {
     return ((anyo % 4 == 0 && anyo % 100 != 0) || (anyo % 400 == 0));
 }
 
-bool TVectorCalendario::comprobarFecha(int dia, int mes, int anyo){
+bool TVectorCalendario::comprobarFecha(int dia, int mes, int anyo) const{
     if(dia > 0 && dia <= 31 && mes > 0 && mes <= 12 && anyo >= 1900){
 
         if(esBisiesto(anyo) && mes==2 && dia > 29)
@@ -43,6 +43,21 @@ TVectorCalendario::TVectorCalendario(int tam){
     }
 }
 
+TVectorCalendario::TVectorCalendario(const TVectorCalendario &vector) {
+    tamano = vector.tamano;
+    error = vector.error;
+
+    if (tamano > 0) {
+        c = new TCalendario[tamano];
+        
+        for (int i = 0; i < tamano; ++i) {
+            c[i] = vector.c[i];
+        }
+    } else {
+        c = nullptr;
+    }
+}
+
 TVectorCalendario::~TVectorCalendario(){
     if (c!=NULL) {
         delete [] c;
@@ -67,7 +82,7 @@ TVectorCalendario &TVectorCalendario::operator=(const TVectorCalendario &tvector
     return *this;
 }
 
-bool TVectorCalendario::operator==(TVectorCalendario &tvector) {
+bool TVectorCalendario::operator==(const TVectorCalendario &tvector) const{
     if(this->tamano == tvector.tamano) {
         for(int i = 0; i < tvector.tamano; i++){
             if(this->c[i] != tvector.c[i])
@@ -80,7 +95,7 @@ bool TVectorCalendario::operator==(TVectorCalendario &tvector) {
     return true;
 }
 
-bool TVectorCalendario::operator!=(TVectorCalendario &tvector) {
+bool TVectorCalendario::operator!=(const TVectorCalendario &tvector) const{
     if(this->tamano == tvector.tamano) {
         for(int i = 0; i < this->tamano; i++){
             if(this->c[i] != tvector.c[i])
@@ -111,7 +126,11 @@ TCalendario TVectorCalendario::operator[](int pos) const {
     return c[pos-1];
 }
 
-int TVectorCalendario::Ocupadas() {
+int TVectorCalendario::Tamano() const {
+    return tamano;
+}
+
+int TVectorCalendario::Ocupadas() const{
     int cont = 0;
     TCalendario cal; 
 
@@ -127,7 +146,7 @@ int TVectorCalendario::Ocupadas() {
     return cont;
 }
 
-bool TVectorCalendario::ExisteCal(TCalendario &calendario) {
+bool TVectorCalendario::ExisteCal(const TCalendario &calendario) const{
     for(int i = 0; i < this->tamano; i++){       
         if(calendario == this->c[i]){
             return true;
@@ -136,7 +155,7 @@ bool TVectorCalendario::ExisteCal(TCalendario &calendario) {
     return false;
 }
 
-void TVectorCalendario::MostrarMensajes(int dia, int mes,int anyo) {
+void TVectorCalendario::MostrarMensajes(int dia, int mes,int anyo) const{
     bool coma = false;
     TCalendario *calendario = new TCalendario(dia, mes, anyo, NULL);
 

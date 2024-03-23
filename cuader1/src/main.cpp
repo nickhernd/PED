@@ -21,22 +21,20 @@ main(void)
   TCalendario k(20,10,2006, (char*) "mensaje 11");
   TCalendario l(21,10,2006, (char*) "mensaje 12");
 
+
   TListaCalendario lista;
   TListaCalendario lista2;
+  TListaCalendario lista3;
+  TListaPos p;
 
   lista.Insertar(a);
   lista.Insertar(b);
   lista.Insertar(c);
-  lista.Insertar(d);
-  lista.Insertar(e);
+  lista2.Insertar(c);
+  lista2.Insertar(d);
 
-  lista2=lista.ExtraerRango(5,20);
-  cout<<lista2<<endl;
+  lista3=lista-lista2;
+  
+  cout<<lista3<<endl;
 
-  TListaPos p,p2;
-  p =lista.Primera();  
-  p2=lista.Ultima();  
-
-  cout<<lista.Obtener(p)<<endl;
-  cout<<lista.Obtener(p2)<<endl;
 }

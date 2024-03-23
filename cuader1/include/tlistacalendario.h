@@ -38,13 +38,13 @@ class TListaPos {
         bool operator==(const TListaPos &) const;
         bool operator!=(const TListaPos &) const;
         TListaPos Siguiente() const;
-        bool EsVacia();
+        bool EsVacia() const;
 };
 
 class TListaCalendario {
     friend class TNodoCalendario;
     friend class TListaPos;
-    friend ostream & operator<<(ostream &, TListaCalendario &);
+    friend ostream & operator<<(ostream &, const TListaCalendario &);
 
     private:
         TNodoCalendario *primero;
@@ -56,16 +56,16 @@ class TListaCalendario {
         TListaCalendario & operator=(const TListaCalendario &);
 
         bool operator==(const TListaCalendario &) const;
-        TListaCalendario operator+(TListaCalendario &);
-        TListaCalendario operator-(TListaCalendario &);
-        bool Insertar(TCalendario &);
+        TListaCalendario operator+(const TListaCalendario &) const;
+        TListaCalendario operator-(const TListaCalendario &) const;
+        bool Insertar(const TCalendario &);
         bool Borrar(TCalendario &);
         bool Borrar (const TListaPos &);
         bool Borrar(int,int,int);
         bool EsVacia() const;
 
-        TCalendario Obtener(TListaPos &);
-        bool Buscar(TCalendario &);
+        TCalendario Obtener(const TListaPos &) const;
+        bool Buscar(TCalendario &) const;
         int Longitud() const;
         TListaPos Primera() const;
         TListaPos Ultima() const;

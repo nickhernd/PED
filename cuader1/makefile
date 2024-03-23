@@ -14,6 +14,9 @@ tad: src/main.cpp $(OBJ)
 $(LIBDIR)/%.o : $(LIBDIR)/%.cpp $(INCLUDEDIR)/%.h
 	$(CC) $(OPTIONS) $(DEBUG) -c -I$(INCLUDEDIR) -o $@ $<
 
+tar: include lib src nombres.txt
+	tar cvfz 48776654W.tar.gz include lib src nombres.txt
+
 doc:
 	doxygen
 

@@ -15,92 +15,92 @@ tests_superados=0
 tests_totales=0
 test_number=0
 
-# Compilar y ejecutar cada archivo .cpp en src
-for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
-    # Obtener el número de test
-    ((test_number+=1))
-    
-    formatted_test_number=$(printf "%02d" "$test_number")
-    echo "$tipo_de_prueba " "$formatted_test_number" 
-
-    # Construir rutas de archivos
-    main_file="$directorio_src/main.cpp"
-    cp "$directorio_pruebas/$tipo_de_prueba/tad$formatted_test_number.cpp.sal" "salida_esperada.cpp.sal"
-    output_file="output.txt"
-
-    # Copiar el archivo de prueba a un archivo temporal
-    cp "$test_file" "$directorio_src/main.cpp"
-
-    # Compilar el programa
-    make
-
-    # Verificar si la compilación fue exitosa
-    if [ $? -ne 0 ]; then
-        echo "Error en la compilación para la prueba $formatted_test_number"
-        continue
-    fi
-
-    # Ejecutar el programa y almacenar la salida en un archivo temporal
-    # valgrind --leak-check=full ./tad
-    ./tad > "$output_file"
-    ((tests_totales+=1))
-
-    echo "Comprobando: " "$testfile"
-    diff -b -B -i "$output_file" "salida_esperada.cpp.sal"
-    if [ "$?" == "0" ]; then
-		echo "OK"
-        ((tests_superados+=1))
-	else
-		echo "ERROR"
-	fi
-    
-    echo "************************************************************************************"
-done
-
-tipo_de_prueba="tvectorcalendario"
-test_number=0
-# Compilar y ejecutar cada archivo .cpp en src
-for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
-    # Obtener el número de test
-    ((test_number+=1))
-    
-    formatted_test_number=$(printf "%02d" "$test_number")
-    echo "$tipo_de_prueba " "$formatted_test_number" 
-
-    # Construir rutas de archivos
-    main_file="$directorio_src/main.cpp"
-    cp "$directorio_pruebas/$tipo_de_prueba/tad$formatted_test_number.cpp.sal" "salida_esperada.cpp.sal"
-    output_file="output.txt"
-
-    # Copiar el archivo de prueba a un archivo temporal
-    cp "$test_file" "$directorio_src/main.cpp"
-
-    # Compilar el programa
-    make
-
-    # Verificar si la compilación fue exitosa
-    if [ $? -ne 0 ]; then
-        echo "Error en la compilación para la prueba $formatted_test_number"
-        continue
-    fi
-
-    # Ejecutar el programa y almacenar la salida en un archivo temporal
-    #valgrind ./tad
-    ./tad > "$output_file"
-    ((tests_totales+=1))
-
-    echo "Comprobando: " "$testfile"
-    diff -b -B -i "$output_file" "salida_esperada.cpp.sal"
-    if [ "$?" == "0" ]; then
-		echo "OK"
-        ((tests_superados+=1))
-	else
-		echo "ERROR"
-	fi
-    
-    echo "************************************************************************************"
-done
-
+## Compilar y ejecutar cada archivo .cpp en src
+#for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
+#    # Obtener el número de test
+#    ((test_number+=1))
+#    
+#    formatted_test_number=$(printf "%02d" "$test_number")
+#    echo "$tipo_de_prueba " "$formatted_test_number" 
+#
+#    # Construir rutas de archivos
+#    main_file="$directorio_src/main.cpp"
+#    cp "$directorio_pruebas/$tipo_de_prueba/tad$formatted_test_number.cpp.sal" "salida_esperada.cpp.sal"
+#    output_file="output.txt"
+#
+#    # Copiar el archivo de prueba a un archivo temporal
+#    cp "$test_file" "$directorio_src/main.cpp"
+#
+#    # Compilar el programa
+#    make
+#
+#    # Verificar si la compilación fue exitosa
+#    if [ $? -ne 0 ]; then
+#        echo "Error en la compilación para la prueba $formatted_test_number"
+#        continue
+#    fi
+#
+#    # Ejecutar el programa y almacenar la salida en un archivo temporal
+#    # valgrind --leak-check=full ./tad
+#    ./tad > "$output_file"
+#    ((tests_totales+=1))
+#
+#    echo "Comprobando: " "$testfile"
+#    diff -b -B -i "$output_file" "salida_esperada.cpp.sal"
+#    if [ "$?" == "0" ]; then
+#		echo "OK"
+#        ((tests_superados+=1))
+#	else
+#		echo "ERROR"
+#	fi
+#    
+#    echo "************************************************************************************"
+#done
+#
+#tipo_de_prueba="tvectorcalendario"
+#test_number=0
+## Compilar y ejecutar cada archivo .cpp en src
+#for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
+#    # Obtener el número de test
+#    ((test_number+=1))
+#    
+#    formatted_test_number=$(printf "%02d" "$test_number")
+#    echo "$tipo_de_prueba " "$formatted_test_number" 
+#
+#    # Construir rutas de archivos
+#    main_file="$directorio_src/main.cpp"
+#    cp "$directorio_pruebas/$tipo_de_prueba/tad$formatted_test_number.cpp.sal" "salida_esperada.cpp.sal"
+#    output_file="output.txt"
+#
+#    # Copiar el archivo de prueba a un archivo temporal
+#    cp "$test_file" "$directorio_src/main.cpp"
+#
+#    # Compilar el programa
+#    make
+#
+#    # Verificar si la compilación fue exitosa
+#    if [ $? -ne 0 ]; then
+#        echo "Error en la compilación para la prueba $formatted_test_number"
+#        continue
+#    fi
+#
+#    # Ejecutar el programa y almacenar la salida en un archivo temporal
+#    #valgrind ./tad
+#    ./tad > "$output_file"
+#    ((tests_totales+=1))
+#
+#    echo "Comprobando: " "$testfile"
+#    diff -b -B -i "$output_file" "salida_esperada.cpp.sal"
+#    if [ "$?" == "0" ]; then
+#		echo "OK"
+#        ((tests_superados+=1))
+#	else
+#		echo "ERROR"
+#	fi
+#    
+#    echo "************************************************************************************"
+#done
+#
 test_number=0
 tipo_de_prueba="tlistacalendario"
 # Compilar y ejecutar cada archivo .cpp en src

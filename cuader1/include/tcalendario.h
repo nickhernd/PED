@@ -36,10 +36,11 @@ class TCalendario{
         bool ModMensaje(char *);
 
         // SOBRECARGA DE OPERADORES
-        bool operator==(TCalendario &);
-        bool operator!=(TCalendario &);
-        bool operator>(TCalendario &);
-        bool operator<(TCalendario &);
+        bool operator==(const TCalendario &) const;
+        bool operator!=(const TCalendario &) const;
+        bool operator>(const TCalendario &) const;
+        bool operator<(const TCalendario &) const;
+
 
         //TCalendario vacío
         bool EsVacio();
