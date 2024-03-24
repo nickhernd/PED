@@ -19,7 +19,7 @@ class TCalendario{
     public:
         TCalendario();
         TCalendario(int dia, int mes, int anyo, char* mensaje);
-        TCalendario(TCalendario &);
+        TCalendario(const TCalendario &);
         ~TCalendario();
         TCalendario &operator=(const TCalendario &);
        
@@ -36,10 +36,10 @@ class TCalendario{
         bool ModMensaje(char *);
 
         // SOBRECARGA DE OPERADORES
-        bool operator==(const TCalendario &) const;
-        bool operator!=(const TCalendario &) const;
-        bool operator>(const TCalendario &) const;
-        bool operator<(const TCalendario &) const;
+        bool operator==(const TCalendario &);
+        bool operator!=(const TCalendario &);
+        bool operator>(const TCalendario &);
+        bool operator<(const TCalendario &);
 
 
         //TCalendario vacío

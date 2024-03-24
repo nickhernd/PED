@@ -11,8 +11,8 @@ private:
     TCalendario *c;
     int tamano;
     TCalendario error;
-    bool esBisiesto(int) const;
-    bool comprobarFecha(int, int, int) const;
+    bool esBisiesto(int) ;
+    bool comprobarFecha(int, int, int) ;
 
 public:
     // CONSTRUCTORES
@@ -23,15 +23,15 @@ public:
     TVectorCalendario &operator=(const TVectorCalendario &);
 
     // MÉTODOS
-    int Tamano() const;
-    int Ocupadas() const;
-    bool ExisteCal(const TCalendario &) const;
-    void MostrarMensajes(int, int, int) const;
+    int Tamano();
+    int Ocupadas();
+    bool ExisteCal(TCalendario &);
+    void MostrarMensajes(int, int, int);
     bool Redimensionar(int);
 
     // OPERADORES
-    bool operator==(const TVectorCalendario &) const;
-    bool operator!=(const TVectorCalendario &) const;
+    bool operator==(TVectorCalendario &);
+    bool operator!=(TVectorCalendario &);
     TCalendario &operator[](int);
     TCalendario operator[](int) const;
 
