@@ -82,17 +82,12 @@ TListaCalendario::TListaCalendario() {
 }
 
 TListaCalendario::TListaCalendario(const TListaCalendario &tlistacal) {
-    if (tlistacal.primero) {
-        primero = new TNodoCalendario(*(tlistacal.primero));
-        TNodoCalendario *nodoActual = primero;
-        TNodoCalendario *nodoOriginal = tlistacal.primero->siguiente;
-        while (nodoOriginal) {
-            nodoActual->siguiente = new TNodoCalendario(*nodoOriginal);
-            nodoActual = nodoActual->siguiente;
-            nodoOriginal = nodoOriginal->siguiente;
-        }
-    } else {
-        primero = NULL;
+    this->primero = NULL;
+    TNodoCalendario *primero = tlistacal.primero;
+
+    while(!primero){
+        (*this).Insertar((*primero).c);
+        primero = (*primero).siguiente;
     }
 }
 
@@ -110,11 +105,11 @@ TListaCalendario &TListaCalendario::operator=(const TListaCalendario &tlistacal)
         if (tlistacal.primero) {
             primero = new TNodoCalendario(*(tlistacal.primero));
             TNodoCalendario *nodoActual = primero;
-            TNodoCalendario *nodoOriginal = tlistacal.primero->siguiente;
-            while (nodoOriginal) {
-                nodoActual->siguiente = new TNodoCalendario(*nodoOriginal);
+            TNodoCalendario *siguiente_nodo = tlistacal.primero->siguiente;
+            while (siguiente_nodo) {
+                nodoActual->siguiente = new TNodoCalendario(*siguiente_nodo);
                 nodoActual = nodoActual->siguiente;
-                nodoOriginal = nodoOriginal->siguiente;
+                siguiente_nodo = siguiente_nodo->siguiente;
             }
         } else {
             primero = NULL;
@@ -192,6 +187,8 @@ bool TListaCalendario::Insertar(const TCalendario &tcal) {
         }
     }
     
+    delete tsiguiente;
+    delete tanterior;
     delete tnodo;
     
     return false;
