@@ -64,7 +64,7 @@ TCalendario::TCalendario(const TCalendario &tcalendario) {
 
     } else {
         this->dia = 1;
-        this->mes = 1;
+        this->mes = 1; 
         this->anyo = 1900;
         this->mensaje = NULL;
     }
