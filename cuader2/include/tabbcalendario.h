@@ -15,9 +15,9 @@ class TNodoABB {
 
     public:
         TNodoABB();
-        TNodoABB(TNodoABB &);
+        TNodoABB(const TNodoABB& nodo);
         ~TNodoABB();
-        TNodoABB & operator=(TNodoABB & const) const;
+        TNodoABB & operator=(TNodoABB & const);
 };
 
 class TABBCalendario {
@@ -26,33 +26,38 @@ class TABBCalendario {
 
     private:
         TNodoABB *raiz;
-        void InordenAux(TVectorCalendario &, int &);
-        void PreordenAux(TVectorCalendario &, int &);
-        void PostordenAux(TVectorCalendario &, int &);
+        void InordenAux(TVectorCalendario& v, int& pos) const;
+        void PreordenAux(TVectorCalendario& v, int& pos) const;
+        void PostordenAux(TVectorCalendario& v, int& pos) const;
+        TNodoABB* CopiarSubarbol(TNodoABB* nodo) const;
+        void BorrarSubarbol(TNodoABB* nodo);
 
     public:
         //FORMA CANONICA
         TABBCalendario();
-        TABBCalendario(TABBCalendario &);
+        TABBCalendario(TABBCalendario &abb);
         ~TABBCalendario();
-        TABBCalendario & operator=(TABBCalendario & const) const;
+        TABBCalendario & operator=(TABBCalendario & const);
 
-        bool operator==( TABBCalendario &);
-        bool EsVacio();
-        bool Insertar(TCalendario &);
-        bool Borrar(TCalendario &);
-        bool Buscar(TCalendario &);
-        TCalendario Raiz();
-        int Altura();
-        int Nodos();
-        int NodosHoja();
-        TVectorCalendario Inorden();
-        TVectorCalendario Preorden();
-        TVectorCalendario Postorden();
-        TVectorCalendario Niveles();
-        TABBCalendario operator+( TABBCalendario &);
-        TABBCalendario operator-( TABBCalendario &);
+        //OPERADORES
+        bool operator==(const TABBCalendario& abb) const;
+        TABBCalendario operator+(const TABBCalendario& abb) const;
+        TABBCalendario operator-(const TABBCalendario& abb) const;
+        friend std::ostream& operator<<(std::ostream& os, const TABBCalendario& abb);
 
+        //METODDOS
+        bool EsVacio() const { return raiz == nullptr; }
+        bool Insertar(const TCalendario& c);
+        bool Borrar(const TCalendario& c);
+        bool Buscar(const TCalendario& c) const;
+        TCalendario Raiz() const;
+        int Altura() const;
+        int Nodos() const;
+        int NodosHoja() const;
+        TVectorCalendario Inorden() const;
+        TVectorCalendario Preorden() const;
+        TVectorCalendario Postorden() const;
+        TVectorCalendario Niveles() const;
 };
 
 #endif

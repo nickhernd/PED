@@ -1,38 +1,57 @@
 #include "tabbcalendario.h"
+#include <queue>
 
 class TNodoABB {
-    TNodoABB() {
-        this->item = NULL;
-        this->iz = NULL;
-        this->de = NULL;
+    TNodoABB::TNodoABB() : iz(nullptr), de(nullptr) {}
+
+    TNodoABB::TNodoABB(const TNodoABB& nodo) : item(nodo.item), iz(nullptr), de(nullptr) {
+    if (nodo.iz) {
+        iz = new TNodoABB(*nodo.iz);
+    }
+    if (nodo.de) {
+        de = new TNodoABB(*nodo.de);
+    }
+}
+
+    TNodoABB::~TNodoABB() {
+        delete iz;
+        delete de;
     }
 
-    TNodoABB(TNodoABB &obj) {
-        this->item = obj.item;
-        this->iz = obj.iz;
-        this->de = obj.de;
-    }
+    TNodoABB& TNodoABB::operator=(const TNodoABB& nodo) {
+        if (this != &nodo) {
+            item = nodo.item;
+            delete iz;
+            delete de;
+            iz = nullptr;
+            de = nullptr;
+                if (nodo.iz) {
+                    iz = new TNodoABB(*nodo.iz);
+                }
 
-    ~TNodoABB() {
-        this->item = NULL;
-        this->iz = NULL;
-        this->de = NULL;
-    }
-
-    TNodoABB & TNodoABB::operator=(TNodoABB &obj) {
-        if((*this) == obj){
-            return (*this);
+                if (nodo.de) {
+                    de = new TNodoABB(*nodo.de);
+                }
         }
-
-        this->item = obj.item;
-        this->iz = obj.iz;
-        this->de = obj.de;
-
-        return (*this);
+        return *this;
     }
 };
 
 class TAABCalendario {
+    TABBCalendario::TABBCalendario() : raiz(nullptr) {}
+    
+    void TAABCalendario::InordenAux(TVectorCalendario &obj, int &num) {
+
+    }
+
+    void TAABCalendario::PreordenAux(TVectorCalendario &obj, int &num) {
+
+    }
+
+    void TAABCalendario::PostordenAux() {
+
+    }
+
     TAABCalendario() 
     {
         this->raiz = NULL;
@@ -54,5 +73,64 @@ class TAABCalendario {
 
     }
 
+    bool operator==( TABBCalendario &) {
+
+    }
+
+    bool EsVacio() {
+
+    }
+    
+    bool Insertar(TCalendario &) {
+
+    }
+
+    bool Borrar(TCalendario &) {
+
+    }
+
+    bool Buscar(TCalendario &) {
+
+    }
+     
+    TCalendario Raiz() {
+
+    }
+
+    int Altura() {
+
+    } 
+
+    int Nodos() {
+
+    }
+
+    int NodosHoja() {
+
+    }
+
+    TVectorCalendario Inorden() {
+
+    }
+
+    TVectorCalendario Preorden() {
+
+    }
+
+    TVectorCalendario Postorden() {
+
+    }
+
+    TVectorCalendario Niveles() {
+
+    }
+
+    TABBCalendario operator+( TABBCalendario &) {
+
+    }
+
+    TABBCalendario operator-( TABBCalendario &) {
+
+    }
     
 }

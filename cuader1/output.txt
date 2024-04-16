@@ -1,6 +1,4 @@
-12/12/2006 "Fecha correcta"
-05/01/1900 "Fecha correcta"
-01/03/2007 "Fecha correcta"
-01/01/1900 ""
-05/01/1900 "Fecha correcta"
-01/01/1900 ""
+0
+0
+4
+0
