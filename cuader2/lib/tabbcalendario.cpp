@@ -118,7 +118,6 @@ class TAABCalendario {
     bool Borrar(TCalendario &cal) {
         if(!Buscar(cal)) return false;
 
-        
     }
 
     bool Buscar(TCalendario &cal) {
