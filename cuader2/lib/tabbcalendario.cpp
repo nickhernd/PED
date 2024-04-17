@@ -47,9 +47,8 @@ class TAABCalendario {
     }
 
     void TAABCalendario::PreordenAux(TVectorCalendario &vec, int &num) {
-
         vec[num].c = raiz.item;
-        PreordenAux()
+        PreordenAux(vec, num + 1);
     }
 
     void TAABCalendario::PostordenAux() {
@@ -162,14 +161,6 @@ class TAABCalendario {
         else return raiz.de.NodosHoja() + raiz.iz.NodosHoja();
     } 
 
-    /*TVectorCalendario Inorden() {
-        int posición = 1;
-        // Vector del tamaño adecuado para almacenar todos los nodos
-        TVectorCalendario v(Nodos());
-        InordenAux(v, posicion);
-        return v;
-    }*/
-
     TVectorCalendario Inorden() {
         int posición = 1;
         // Vector del tamaño adecuado para almacenar todos los nodos
@@ -179,7 +170,7 @@ class TAABCalendario {
     }
 
     TVectorCalendario Preorden() {
-        int posición = 0;
+        int posición = 1;
         // Vector del tamaño adecuado para almacenar todos los nodos
         TVectorCalendario v(Nodos());
         PreordenAux(v, posicion);
@@ -187,7 +178,11 @@ class TAABCalendario {
     }
 
     TVectorCalendario Postorden() {
-
+        int posición = 1;
+        // Vector del tamaño adecuado para almacenar todos los nodos
+        TVectorCalendario v(Nodos());
+        PreordenAux(v, posicion);
+        return v;
     }
 
     TVectorCalendario Niveles() {
