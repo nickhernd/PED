@@ -4,14 +4,14 @@
 class TNodoABB {
     TNodoABB::TNodoABB() : iz(nullptr), de(nullptr) {}
 
-    TNodoABB::TNodoABB(const TNodoABB& nodo) : item(nodo.item), iz(nullptr), de(nullptr) {
-    if (nodo.iz) {
-        iz = new TNodoABB(*nodo.iz);
+    TNodoABB::TNodoABB(const TNodoABB &nodo) : item(nodo.item), iz(nullptr), de(nullptr) {
+        if (nodo.iz) {
+            iz = new TNodoABB(*nodo.iz);
+        }
+        if (nodo.de) {
+            de = new TNodoABB(*nodo.de);
+        }
     }
-    if (nodo.de) {
-        de = new TNodoABB(*nodo.de);
-    }
-}
 
     TNodoABB::~TNodoABB() {
         delete iz;
@@ -48,7 +48,6 @@ class TAABCalendario {
 
     void TAABCalendario::PreordenAux(TVectorCalendario &vec, int &num) {
 
-
         vec[num].c = raiz.item;
         PreordenAux()
     }
@@ -57,21 +56,21 @@ class TAABCalendario {
 
     }
 
-    TAABCalendario() 
-    {
+    TAABCalendario() {
         this->raiz = NULL;
     }
 
 
-    TABBCalendario(TABBCalendario &obj)
-    {
+    TABBCalendario(TABBCalendario &obj) {
         this->raiz = NULL;
     }
 
-    ~TAABCalendario() 
-    {
-        delete raiz;
-        this->raiz = NULL;
+    ~TAABCalendario() {
+        if(raiz != nullptr) {
+            delete raiz;
+            this->raiz = NULL;
+        }
+        
     }
 
     TAABCalendario &TAABCalendario::operator=(const TAABCalendario &tabb) const {
