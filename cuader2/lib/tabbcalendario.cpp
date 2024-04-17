@@ -13,11 +13,7 @@ class TNodoABB {
         }
     }
 
-    TNodoABB::~TNodoABB() {
-        delete iz;
-        delete de;
-        this->item = new TCalendario();
-    }
+    TNodoABB::~TNodoABB() {}
 
     TNodoABB& TNodoABB::operator=(const TNodoABB& nodo) {
         if (this != &nodo) {
@@ -43,7 +39,6 @@ class TAABCalendario {
     
     void TAABCalendario::InordenAux(TVectorCalendario &vec, int &num) {
        
-
     }
 
     void TAABCalendario::PreordenAux(TVectorCalendario &vec, int &num) {
