@@ -13,11 +13,7 @@ class TNodoABB {
     }
 }
 
-    TNodoABB::~TNodoABB() {
-        delete iz;
-        delete de;
-        this->item = new TCalendario();
-    }
+    TNodoABB::~TNodoABB() {}
 
     TNodoABB& TNodoABB::operator=(const TNodoABB& nodo) {
         if (this != &nodo) {
@@ -43,12 +39,9 @@ class TAABCalendario {
     
     void TAABCalendario::InordenAux(TVectorCalendario &vec, int &num) {
        
-
     }
 
     void TAABCalendario::PreordenAux(TVectorCalendario &vec, int &num) {
-
-
         vec[num].c = raiz.item;
         PreordenAux()
     }
@@ -59,19 +52,18 @@ class TAABCalendario {
 
     TAABCalendario() 
     {
-        this->raiz = NULL;
+        this->raiz = nullptr;
     }
 
 
     TABBCalendario(TABBCalendario &obj)
     {
-        this->raiz = NULL;
+        this->raiz = obj.raiz;
     }
 
     ~TAABCalendario() 
     {
-        delete raiz;
-        this->raiz = NULL;
+        BorrarSubarbol(this->raiz);
     }
 
     TAABCalendario &TAABCalendario::operator=(const TAABCalendario &tabb) const {
@@ -92,49 +84,108 @@ class TAABCalendario {
 
     }
     
-    bool Insertar(TCalendario &cal) {
-        if(raiz = nullptr) {
-            raiz.item = cal;
-            return true;
+    bool TABBCalendario::Insertar(const TCalendario& c) {
+    if (EsVacio()) {
+        raiz = new TNodoABB();
+        raiz->item = c;
+        return true;
+    }
+
+    TNodoABB* actual = raiz;
+    TNodoABB* padre = nullptr;
+
+    while (actual != nullptr) {
+        if (c == actual->item) {
+            return false; // El elemento ya existe en el árbol
+        } else if (c < actual->item) {
+            padre = actual;
+            actual = actual->iz;
+        } else {
+            padre = actual;
+            actual = actual->de;
+        }
+    }
+
+    TNodoABB* nuevo = new TNodoABB();
+    nuevo->setItem(c);
+
+    if (c < padre->iz) {
+        padre->iz = nuevo;
+    } else {
+        padre->de = nuevo;
+    }
+
+    return true;
+    }
+
+    bool TABBCalendario::Borrar(const TCalendario& c) {
+        if (!Buscar(c)) {
+            return false; // El elemento no existe en el árbol
         }
 
-        if(Buscar(cal)) return false;
-        TNodoABB *actual = new TNodoABB();
-        TNodoABB *nextNodo = new TNodoABB();
-        actual = raiz;
-                
-        do {
-            if(cal > actual.item) nextNodo = actual.de;
-            else if(cal < actual.item) nextNodo = actual.iz;
-        } while (nextNodo != nullptr);
-
-        if(cal > actual.item) actual.de.item = cal;
-        else actual.iz.item = cal;
-
-        return true; 
-
+        BorrarSubarbol(raiz, c);
+        return true;
     }
 
-    bool Borrar(TCalendario &cal) {
-        if(!Buscar(cal)) return false;
+    void TABBCalendario::BorrarSubarbol(TNodoABB* nodo) {
+        if (nodo == nullptr) {
+            return nullptr; // El elemento no está en el árbol
+        }
 
-        
+        if (c < nodo->item) {
+            nodo->iz = BorrarSubarbol(nodo->iz, c);
+        } else if (c > nodo->item) {
+            nodo->de = BorrarSubarbol(nodo->de, c);
+        } else {
+            // El nodo a borrar es este nodo
+
+            // Caso 1: El nodo no tiene hijos
+            if (nodo->iz == nullptr && nodo->de == nullptr) {
+                delete nodo;
+                return nullptr;
+            }
+
+            // Caso 2: El nodo tiene un solo hijo
+            if (nodo->iz == nullptr) {
+                TNodoABB* temp = nodo->de;
+                delete nodo;
+                return temp;
+            } else if (nodo->de == nullptr) {
+                TNodoABB* temp = nodo->iz;
+                delete nodo;
+                return temp;
+            }
+
+            // Caso 3: El nodo tiene dos hijos
+            TNodoABB* temp = BuscarMayorIzquierda(nodo->iz);
+            nodo->item = temp->item;
+            nodo->iz = BorrarSubarbol(nodo->iz);
+        }
+
+        return nodo;
     }
 
-    bool Buscar(TCalendario &cal) {
-        if(raiz == nullptr) return false;
-        if(raiz.item == cal) return true;
-        TNodoABB *nextNodo = new TNodoABB();
-        nextNodo = raiz;
-        do {
-            if(cal > nextNodo.item) nextNodo = nextNodo.de;
-            else if(cal < nextNodo.item) nextNodo = nextNodo.iz;
-            else return true;
-        } while (nextNodo != nullptr);
+    TNodoABB* TABBCalendario::BuscarMayorIzquierda(TNodoABB* nodo) {
+        if (nodo == nullptr || nodo->de == nullptr) {
+            return nodo;
+        }
+        return BuscarMayorIzquierda(nodo->de);
+    }
 
-        delete nextNodo;
-    
-        return false;
+    bool TABBCalendario::Buscar(const TCalendario& c) const {
+        TNodoABB* actual = raiz;
+
+        while (actual != nullptr) {
+            if (c == actual->item) {
+                return true; // El elemento está en el árbol
+            } else if (c < actual->item) {
+                actual = actual->iz;
+            } else {
+                actual = actual->de;
+            }
+        }
+
+        return false; // El elemento no está en el árbol
     }
      
     TCalendario Raiz() {
@@ -181,7 +232,7 @@ class TAABCalendario {
     }
 
     TVectorCalendario Preorden() {
-        int posición = 0;
+        int posición = 1;
         // Vector del tamaño adecuado para almacenar todos los nodos
         TVectorCalendario v(Nodos());
         PreordenAux(v, posicion);
@@ -189,7 +240,11 @@ class TAABCalendario {
     }
 
     TVectorCalendario Postorden() {
-
+        int posición = 1;
+        // Vector del tamaño adecuado para almacenar todos los nodos
+        TVectorCalendario v(Nodos());
+        PreordenAux(v, posicion);
+        return v;
     }
 
     TVectorCalendario Niveles() {

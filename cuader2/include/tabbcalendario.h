@@ -14,10 +14,10 @@ class TNodoABB {
         TABBCalendario iz, de;
 
     public:
-        TNodoABB();
-        TNodoABB(const TNodoABB& nodo);
-        ~TNodoABB();
-        TNodoABB & operator=(TNodoABB & const);
+        TNodoABB(); //HACHO
+        TNodoABB(const TNodoABB& nodo); // HECHO
+        ~TNodoABB(); // HECHO
+        TNodoABB & operator=(TNodoABB & const); // HECHO
 };
 
 class TABBCalendario {
