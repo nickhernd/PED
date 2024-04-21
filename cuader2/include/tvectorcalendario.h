@@ -23,7 +23,7 @@ public:
     TVectorCalendario &operator=(const TVectorCalendario &);
 
     // MÉTODOS
-    int Tamano();
+    int Tamano() const;
     int Ocupadas();
     bool ExisteCal(TCalendario &);
     void MostrarMensajes(int, int, int);

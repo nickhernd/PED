@@ -126,7 +126,7 @@ TCalendario TVectorCalendario::operator[](int pos) const {
     return c[pos-1];
 }
 
-int TVectorCalendario::Tamano() {
+int TVectorCalendario::Tamano() const{
     return tamano;
 }
 
@@ -215,7 +215,7 @@ bool TVectorCalendario::Redimensionar(int tam){
     }
 }
 
-ostream & operator<<(ostream & os, TVectorCalendario &tvector) {
+ostream & operator<<(ostream & os, TVectorCalendario &tvector){
     if(tvector.c == NULL) {
         os << "[]"; 
     } else {

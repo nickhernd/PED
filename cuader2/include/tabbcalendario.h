@@ -2,55 +2,38 @@
 #define _TABBCALENDARIO_H_
 
 #include <iostream>
+#include <queue>
+using namespace std;
+
 #include "tcalendario.h"
 #include "tvectorcalendario.h"
 
-using namespace std;
-
-class TNodoABB {
-    friend class TABBCalendario;
-    private:
-        TCalendario item;
-        TABBCalendario iz; 
-        TAABCalendario de;
-
-    public:
-        TNodoABB(); //HACHO
-        TNodoABB(const TNodoABB& nodo); // HECHO
-        ~TNodoABB(); // HECHO
-        TNodoABB & operator=(TNodoABB & const); // HECHO
-};
+class TNodoABB;
 
 class TABBCalendario {
     friend class TNodoABB;
-    friend ostream & operator<<(ostream &, TABBCalendario &);
-
+    
     private:
         TNodoABB *raiz;
         void InordenAux(TVectorCalendario& v, int& pos) const;
         void PreordenAux(TVectorCalendario& v, int& pos) const;
         void PostordenAux(TVectorCalendario& v, int& pos) const;
 
-        void InordenAux(TVectorCalendario& v, int& pos, const TNodoABB* nodo) const;
-        void PreordenAux(TVectorCalendario& v, int& pos, const TNodoABB* nodo) const;
-        void PostordenAux(TVectorCalendario& v, int& pos, const TNodoABB* nodo) const;
-
-        TNodoABB* CopiarSubarbol(TNodoABB* nodo) const;
-        TNodoABB* BuscarMayorIzquierda(TNodoABB* nodo) const;
-        void BorrarSubarbol(TNodoABB* nodo);
+        void CopiaArbol(const TABBCalendario &abb);
+        TCalendario Ordenar() const;
 
     public:
         //FORMA CANONICA
         TABBCalendario();
-        TABBCalendario(TABBCalendario &abb);
+        TABBCalendario(const TABBCalendario &abb);
         ~TABBCalendario();
-        TABBCalendario & operator=(TABBCalendario & const);
+        TABBCalendario & operator=(const TABBCalendario &);
 
         //OPERADORES
         bool operator==(const TABBCalendario& abb) const;
         TABBCalendario operator+(const TABBCalendario& abb) const;
         TABBCalendario operator-(const TABBCalendario& abb) const;
-        friend std::ostream& operator<<(std::ostream& os, const TABBCalendario& abb);
+        friend ostream& operator<<(ostream& os, const TABBCalendario& abb);
 
         //METODDOS
         bool EsVacio() const { return raiz == nullptr; }
@@ -65,6 +48,24 @@ class TABBCalendario {
         TVectorCalendario Preorden() const;
         TVectorCalendario Postorden() const;
         TVectorCalendario Niveles() const;
+
+        TABBCalendario operator+(TABBCalendario &);
+        TABBCalendario operator-(TABBCalendario &);
+};
+
+class TNodoABB {
+    friend class TABBCalendario;
+    private:
+        TCalendario item;
+        TABBCalendario iz; 
+        TABBCalendario de;
+        void CopiaNodo(const TNodoABB &nodo);
+
+    public:
+        TNodoABB(); //HACHO
+        TNodoABB(const TNodoABB& nodo); // HECHO
+        ~TNodoABB(); // HECHO
+        TNodoABB & operator=(const TNodoABB &); // HECHO
 };
 
 #endif

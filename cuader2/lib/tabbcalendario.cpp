@@ -1,326 +1,288 @@
 #include "tabbcalendario.h"
+#include "tcalendario.h"
+#include "tvectorcalendario.h"
 #include <queue>
+#include <iostream>
+using namespace std;
 
-class TNodoABB {
-    TNodoABB::TNodoABB() : iz(nullptr), de(nullptr) {}
-
-    TNodoABB::TNodoABB(const TNodoABB& nodo) : item(nodo.item), iz(nullptr), de(nullptr) {
-    if (nodo.iz) {
-        iz = new TNodoABB(*nodo.iz);
-    }
-    if (nodo.de) {
-        de = new TNodoABB(*nodo.de);
+// PRIVADO
+void TABBCalendario::InordenAux(TVectorCalendario &v, int &pos) const{
+    if(!this->EsVacio()){
+        this->raiz->iz.InordenAux(v, pos);
+        v[pos++] = this->Raiz();
+        this->raiz->de.InordenAux(v, pos);
     }
 }
 
-    TNodoABB::~TNodoABB() {}
-
-    TNodoABB& TNodoABB::operator=(const TNodoABB& nodo) {
-        if (this != &nodo) {
-            item = nodo.item;
-            delete iz;
-            delete de;
-            iz = nullptr;
-            de = nullptr;
-                if (nodo.iz) {
-                    iz = new TNodoABB(*nodo.iz);
-                }
-
-                if (nodo.de) {
-                    de = new TNodoABB(*nodo.de);
-                }
-        }
-        return *this;
+void TABBCalendario::PreordenAux(TVectorCalendario &v, int &pos) const{
+    if(!this->EsVacio()){
+        v[pos++] = this->Raiz();
+        this->raiz->iz.PreordenAux(v, pos);        
+        this->raiz->de.PreordenAux(v, pos);
     }
-};
+}
 
-class TAABCalendario {
-    
-    //PRIVADO
-    void TABBCalendario::InordenAux(TVectorCalendario& v, int& pos) const {
-        if (raiz == nullptr) {
-            return;
-        }
-
-        InordenAux(v, pos, raiz);
+void TABBCalendario::PostordenAux(TVectorCalendario &v, int &pos) const{
+    if(!this->EsVacio()){ 
+        this->raiz->iz.PostordenAux(v, pos);        
+        this->raiz->de.PostordenAux(v, pos);
+        v[pos++] = this->Raiz();
     }
+}
 
-    void TABBCalendario::InordenAux(TVectorCalendario& v, int& pos, const TNodoABB* nodo) const {
-        if (nodo != nullptr) {
-            InordenAux(v, pos, nodo->iz);
-            v[pos++] = nodo->item;
-            InordenAux(v, pos, nodo->de);
-        }
+void TABBCalendario::CopiaArbol(const TABBCalendario &abb){
+    if(!abb.EsVacio()){
+        this->raiz = new TNodoABB();
+        this->raiz->item = abb.raiz->item;
+        this->raiz->iz.CopiaArbol(abb.raiz->iz);
+        this->raiz->de.CopiaArbol(abb.raiz->de);
     }
+    else this->raiz = NULL;
+}
 
-    void TABBCalendario::PreordenAux(TVectorCalendario& v, int& pos) const {
-        if (raiz == nullptr) {
-            return;
-        }
+TVectorCalendario TABBCalendario::Inorden() const{
+    int posicion = 1;
+    // Vector del tamaño adecuado para almacenar todos los nodos
+    TVectorCalendario v(Nodos());
+    InordenAux(v, posicion);
+    return v;
+}
 
-        PreordenAux(v, pos, raiz);
-    }
+TVectorCalendario TABBCalendario::Preorden() const{
+    int posicion = 1;
+    // Vector del tamaño adecuado para almacenar todos los nodos
+    TVectorCalendario v(Nodos());
+    PreordenAux(v, posicion);
+    return v;
+}
 
-    void TABBCalendario::PreordenAux(TVectorCalendario& v, int& pos, const TNodoABB* nodo) const {
-        if (nodo != nullptr) {
-            v[pos++] = nodo->item;
-            PreordenAux(v, pos, nodo->iz);
-            PreordenAux(v, pos, nodo->de);
-        }
-    }
+TVectorCalendario TABBCalendario::Postorden() const{
+    int posicion = 1;
+    // Vector del tamaño adecuado para almacenar todos los nodos
+    TVectorCalendario v(Nodos());
+    PreordenAux(v, posicion);
+    return v;
+}
 
-    void TABBCalendario::PostordenAux(TVectorCalendario& v, int& pos) const {
-        if (raiz == nullptr) {
-            return;
-        }
+//PUBLICO
+TABBCalendario::TABBCalendario() : raiz(nullptr) {}
 
-        PostordenAux(v, pos, raiz);
-    }
+TABBCalendario::TABBCalendario(const TABBCalendario &obj)
+{
+    this->raiz = obj.raiz;
+}
 
-    void TABBCalendario::PostordenAux(TVectorCalendario& v, int& pos, const TNodoABB* nodo) const {
-        if (nodo != nullptr) {
-            PostordenAux(v, pos, nodo->iz);
-            PostordenAux(v, pos, nodo->de);
-            v[pos++] = nodo->item;
-        }
-    }
-
-    TNodoABB* TABBCalendario::CopiarSubarbol(TNodoABB* nodo) const {
-        if (nodo == nullptr) {
-            return nullptr;
-        }
-
-        TNodoABB* nuevoNodo = new TNodoABB();
-        nuevoNodo->item = nodo->item;
-
-        nuevoNodo->iz = CopiarSubarbol(nodo->iz);
-        nuevoNodo->de = CopiarSubarbol(nodo->de);
-
-        return nuevoNodo;
-    }
-
-    //PUBLICO
-    TABBCalendario::TABBCalendario() : raiz(nullptr) {}
-
-    TABBCalendario(TABBCalendario &obj)
-    {
-        this->raiz = obj.raiz;
-    }
-
-    TAABCalendario::~TAABCalendario() 
-    {
-        BorrarSubarbol(this->raiz);
-    }
+TABBCalendario::~TABBCalendario() 
+{
+    Borrar(this->raiz->item);
+}
 
     
-    TABBCalendario& TABBCalendario::operator=(const TABBCalendario& tabb) {
-        if (this != &tabb) {
-            // Limpiar el árbol actual
-            BorrarSubarbol(raiz);
-
-            // Copiar el nuevo árbol
-            raiz = CopiarSubarbol(tabb.raiz);
-        }
-        return *this;
+TABBCalendario& TABBCalendario::operator=(const TABBCalendario& tabb) {
+   if(this != &tabb){
+        this->~TABBCalendario();
+        this->CopiaArbol(tabb);
     }
+
+    return *this;
+}
     
 
-    bool TABBCalendario::operator==(const TABBCalendario& tabb) const {
-        if (Nodos() != tabb.Nodos()) {
-            return false; // Si los árboles tienen diferente cantidad de nodos, no son iguales
-        }
-
-        // Crear vectores con los recorridos en inorden de ambos árboles
-        TVectorCalendario vecThis = Inorden();
-        TVectorCalendario vecTabb = tabb.Inorden();
-
-        // Comparar los vectores elemento a elemento
-        for (int i = 1; i <= vecThis.Nelementos(); i++) {
-            if (vecThis[i] != vecTabb[i]) {
-                return false; // Si hay un elemento diferente, los árboles no son iguales
-            }
-        }
-
-        return true; // Si todos los elementos son iguales, los árboles son iguales
+bool TABBCalendario::operator==(const TABBCalendario& abb) const {
+    if (Nodos() != abb.Nodos()) {
+        return false; // Si los árboles tienen diferente cantidad de nodos, no son iguales
     }
+
+    // Crear vectores con los recorridos en inorden de ambos árboles
+    TVectorCalendario vecThis = Inorden();
+    TVectorCalendario vecTabb = abb.Inorden();
+
+    // Comparar los vectores elemento a elemento
+    for (int i = 1; i <= Nodos(); i++) {
+        if (vecThis[i] != vecTabb[i]) {
+            return false; // Si hay un elemento diferente, los árboles no son iguales
+        }
+    }
+
+    return true; // Si todos los elementos son iguales, los árboles son iguales
+}
     
-    bool TABBCalendario::Insertar(const TCalendario& c) {
-        if (EsVacio()) {
-            raiz = new TNodoABB();
-            raiz->item = c;
+bool TABBCalendario::Insertar(const TCalendario &cal){
+    if(this->EsVacio()){
+        TNodoABB *nuevoNodo = new TNodoABB();
+        nuevoNodo->item = cal;
+        this->raiz = nuevoNodo;
+        return true;
+    }
+    else if(!this->Buscar(cal)){
+        if(this->raiz->item < cal)
+            return this->raiz->de.Insertar(cal);
+        else return this->raiz->iz.Insertar(cal);
+    }
+    return false;
+}
+
+TCalendario TABBCalendario::Ordenar() const{
+    TCalendario cal;
+    if(!this->EsVacio()){
+        if(this->raiz->de.EsVacio())
+            return this->raiz->item;
+        else return this->raiz->de.Ordenar();
+    }
+
+    return cal;
+}
+
+bool TABBCalendario::Borrar(const TCalendario &cal){
+    if(!this->EsVacio() && this->Buscar(cal)){
+        if(this->raiz->item > cal)
+            return this->raiz->iz.Borrar(cal);
+
+        else if(this->raiz->item < cal)
+            return this->raiz->de.Borrar(cal);
+
+        //Nodo hoja
+        else if(this->raiz->iz.EsVacio() && this->raiz->de.EsVacio() ){
+            this->raiz = NULL;
             return true;
         }
-    
-        TNodoABB* actual = raiz;
-        TNodoABB* padre = nullptr;
-    
-        while (actual != nullptr) {
-            if (c == actual->item) {
-                return false; // El elemento ya existe en el árbol
-            } else if (c < actual->item) {
-                padre = actual;
-                actual = actual->iz;
-            } else {
-                padre = actual;
-                actual = actual->de;
-            }
-        }
-    
-        TNodoABB* nuevo = new TNodoABB();
-        nuevo->setItem(c);
-    
-        if (c < padre->iz) {
-            padre->iz = nuevo;
-        } else {
-            padre->de = nuevo;
-        }
-    
-        return true;
-    }
 
-    bool TABBCalendario::Borrar(const TCalendario& c) {
-        if (!Buscar(c)) {
-            return false; // El elemento no existe en el árbol
+        else if(this->raiz->iz.EsVacio() && !this->raiz->de.EsVacio()){
+            this->raiz = this->raiz->de.raiz;
+            return true;
         }
 
-        BorrarSubarbol(raiz, c);
-        return true;
-    }
-
-    void TABBCalendario::BorrarSubarbol(TNodoABB* nodo) {
-        if (nodo == nullptr) {
-            return nullptr; // El elemento no está en el árbol
+        else if(!this->raiz->iz.EsVacio() && this->raiz->de.EsVacio()){
+            this->raiz = this->raiz->iz.raiz;
+            return true;
         }
 
-        if (c < nodo->item) {
-            nodo->iz = BorrarSubarbol(nodo->iz, c);
-        } else if (c > nodo->item) {
-            nodo->de = BorrarSubarbol(nodo->de, c);
-        } else {
-            // El nodo a borrar es este nodo
-
-            // Caso 1: El nodo no tiene hijos
-            if (nodo->iz == nullptr && nodo->de == nullptr) {
-                delete nodo;
-                return nullptr;
-            }
-
-            // Caso 2: El nodo tiene un solo hijo
-            if (nodo->iz == nullptr) {
-                TNodoABB* temp = nodo->de;
-                delete nodo;
-                return temp;
-            } else if (nodo->de == nullptr) {
-                TNodoABB* temp = nodo->iz;
-                delete nodo;
-                return temp;
-            }
-
-            // Caso 3: El nodo tiene dos hijos
-            TNodoABB* temp = BuscarMayorIzquierda(nodo->iz);
-            nodo->item = temp->item;
-            nodo->iz = BorrarSubarbol(nodo->iz);
+        else if(!this->raiz->iz.EsVacio() && !this->raiz->de.EsVacio()){
+            TCalendario izq = this->raiz->iz.Ordenar();
+            this->raiz->item = izq;
+            this->raiz->iz.Borrar(izq);
         }
 
-        return nodo;
-    }
-
-    TNodoABB* TABBCalendario::BuscarMayorIzquierda(TNodoABB* nodo) const{
-        if (nodo == nullptr || nodo->de == nullptr) {
-            return nodo;
-        }
-        return BuscarMayorIzquierda(nodo->de);
-    }
-
-    bool TABBCalendario::Buscar(const TCalendario& c) const {
-        TNodoABB* actual = raiz;
-
-        while (actual != nullptr) {
-            if (c == actual->item) {
-                return true; // El elemento está en el árbol
-            } else if (c < actual->item) {
-                actual = actual->iz;
-            } else {
-                actual = actual->de;
-            }
-        }
-
-        return false; // El elemento no está en el árbol
-    }
-     
-    TCalendario TAABCalendario::Raiz() {
-        return raiz.item;
-    }
-
-    int TAABCalendario::Altura() {
-        if(raiz = nullptr) {
-            return 0;
-        }
-
-        return 1 + max(raiz.iz.Altura(), raiz.de.Altura());
-    } 
-
-    int TAABCalendario::Nodos() {
-        if(raiz = nullptr) {
-            return 0;
-        }
-
-        return 1 + raiz.iz.Nodos() + raiz.de.Nodos();
-    }
-
-    int TAABCalendario::NodosHoja() {
-        if(raiz.de == nullptr && raiz.iz == nullptr) return 0;
-        if(raiz.de != nullptr && raiz.iz == nullptr) return raiz.de.NodosHoja();
-        else if(raiz.de == nullptr && raiz.iz != nullptr) return raiz.iz.NodosHoja();
-        else return raiz.de.NodosHoja() + raiz.iz.NodosHoja();
-    } 
-
-    /*TVectorCalendario Inorden() {
-        int posición = 1;
-        // Vector del tamaño adecuado para almacenar todos los nodos
-        TVectorCalendario v(Nodos());
-        InordenAux(v, posicion);
-        return v;
-    }*/
-
-    TVectorCalendario TAABCalendario::Inorden() {
-        int posición = 1;
-        // Vector del tamaño adecuado para almacenar todos los nodos
-        TVectorCalendario v(Nodos());
-        InordenAux(v, posicion);
-        return v;
-    }
-
-    TVectorCalendario TAABCalendario::Preorden() {
-        int posición = 1;
-        // Vector del tamaño adecuado para almacenar todos los nodos
-        TVectorCalendario v(Nodos());
-        PreordenAux(v, posicion);
-        return v;
-    }
-
-    TVectorCalendario TAABCalendario::Postorden() {
-        int posición = 1;
-        // Vector del tamaño adecuado para almacenar todos los nodos
-        TVectorCalendario v(Nodos());
-        PreordenAux(v, posicion);
-        return v;
-    }
-
-    TVectorCalendario TAABCalendario::Niveles() {
+        else return false;
 
     }
 
-    TABBCalendario TAABCalendario::operator+( TABBCalendario &) {
-
-    }
-
-    TABBCalendario TAABCalendario::operator-( TABBCalendario &) {
-
-    }
-
-    friend ostream & operator<<(ostream &, TABBCalendario &) {
-
-    }
-    
+    return false;
 }
+
+bool TABBCalendario::Buscar(const TCalendario &cal) const{
+    if(!this->EsVacio()){
+        if(this->raiz->item == cal)
+            return true;
+        else{
+            if(this->raiz->de.Buscar(cal) || this->raiz->iz.Buscar(cal))
+                return true;
+            else return false; 
+        }
+    }
+    return false;
+}
+     
+TCalendario TABBCalendario::Raiz() const{
+    return raiz->item;
+}
+
+int TABBCalendario::Altura() const{
+    if(raiz == nullptr) {
+        return 0;
+    }
+
+    return 1 + max(raiz->iz.Altura(), raiz->de.Altura());
+} 
+
+int TABBCalendario::Nodos() const{
+    if(raiz == nullptr) {
+        return 0;
+    }
+
+    return 1 + raiz->iz.Nodos() + raiz->de.Nodos();
+}
+
+int TABBCalendario::NodosHoja() const{
+    if(raiz->de.EsVacio() && raiz->iz.EsVacio()) return 0;
+    if(!raiz->de.EsVacio() && raiz->iz.EsVacio()) return raiz->de.NodosHoja();
+    else if(raiz->de.EsVacio() && !raiz->iz.EsVacio()) return raiz->iz.NodosHoja();
+    else return raiz->de.NodosHoja() + raiz->iz.NodosHoja();
+} 
+
+TVectorCalendario TABBCalendario::Niveles() const{
+    queue<TABBCalendario> queue;
+    TVectorCalendario tvectorcal(this->Nodos());
+
+    TABBCalendario abb = *this;
+    queue.push(abb);
+
+    int i = 1;
+    while(!queue.empty()){
+        tvectorcal[i] = abb.raiz->item;
+        abb = queue.front();
+        
+        if(!abb.raiz->iz.EsVacio())
+            queue.push(abb.raiz->iz);
+
+        if(!abb.raiz->de.EsVacio())
+            queue.push(abb.raiz->de);
+        i++;
+    }
+    return tvectorcal;
+}
+
+TABBCalendario TABBCalendario::operator+ (TABBCalendario &abb){
+    TABBCalendario result(*this);
+    TABBCalendario aux(abb);
+
+    TVectorCalendario listaNodos = aux.Inorden();
+
+    for(int i = 1; i <= listaNodos.Tamano(); i++)
+        result.Insertar(listaNodos[i]);
+
+    return result;
+}
+
+TABBCalendario TABBCalendario::operator- (TABBCalendario &abb){
+    TVectorCalendario listaNodos = this->Inorden();
+    TABBCalendario result;
+
+    for(int i = 1; i <= listaNodos.Tamano(); i++){
+        TCalendario cal = listaNodos[i];
+
+        if(!abb.Buscar(cal))
+            result.Insertar(cal);
+    }
+    return result;
+}
+
+ostream& operator<<(ostream &os, const TVectorCalendario &vec) {
+    for (int i = 1; i <= vec.Tamano(); ++i) {
+        os << "[" << i << "] " << vec[i];
+    }
+    return os;
+}
+
+
+TNodoABB::TNodoABB() {}
+
+TNodoABB::TNodoABB(const TNodoABB &nodo) : item(nodo.item), iz(nodo.iz), de(nodo.de){}
+
+TNodoABB::~TNodoABB() {}
+
+TNodoABB & TNodoABB::operator=(const TNodoABB &nodo){
+    if(this != &nodo){      //Protección contra autoasignación
+        this->~TNodoABB();
+        CopiaNodo(nodo);
+    }
+    return *this;
+}
+
+void TNodoABB::CopiaNodo(const TNodoABB &nodo){
+    //Usando el operador= de la clase TABBCalendario
+    this->item = nodo.item;
+    this->iz = nodo.iz;
+    this->de = nodo.de;
+}
+
