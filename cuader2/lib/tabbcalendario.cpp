@@ -5,6 +5,7 @@
 #include <iostream>
 using namespace std;
 
+<<<<<<< HEAD
 // PRIVADO
 void TABBCalendario::InordenAux(TVectorCalendario &v, int &pos) const{
     if(!this->EsVacio()){
@@ -21,6 +22,21 @@ void TABBCalendario::PreordenAux(TVectorCalendario &v, int &pos) const{
         this->raiz->de.PreordenAux(v, pos);
     }
 }
+=======
+class TNodoABB {
+    TNodoABB::TNodoABB() : iz(nullptr), de(nullptr) {}
+
+    TNodoABB::TNodoABB(const TNodoABB &nodo) : item(nodo.item), iz(nullptr), de(nullptr) {
+        if (nodo.iz) {
+            iz = new TNodoABB(*nodo.iz);
+        }
+        if (nodo.de) {
+            de = new TNodoABB(*nodo.de);
+        }
+    }
+
+    TNodoABB::~TNodoABB() {}
+>>>>>>> abf49d7e635386f1debb3850f08effe8bf42bc66
 
 void TABBCalendario::PostordenAux(TVectorCalendario &v, int &pos) const{
     if(!this->EsVacio()){ 
@@ -78,6 +94,7 @@ TABBCalendario::~TABBCalendario()
 }
 
     
+<<<<<<< HEAD
 TABBCalendario& TABBCalendario::operator=(const TABBCalendario& tabb) {
    if(this != &tabb){
         this->~TABBCalendario();
@@ -86,6 +103,55 @@ TABBCalendario& TABBCalendario::operator=(const TABBCalendario& tabb) {
 
     return *this;
 }
+=======
+    void TAABCalendario::InordenAux(TVectorCalendario &vec, int &num) {
+       
+    }
+
+    void TAABCalendario::PreordenAux(TVectorCalendario &vec, int &num) {
+        vec[num].c = raiz.item;
+        PreordenAux(vec, num + 1);
+    }
+
+    void TAABCalendario::PostordenAux() {
+
+    }
+
+    TAABCalendario() {
+        this->raiz = NULL;
+    }
+
+
+    TABBCalendario(TABBCalendario &obj) {
+        this->raiz = NULL;
+    }
+
+    ~TAABCalendario() {
+        if(raiz != nullptr) {
+            delete raiz;
+            this->raiz = NULL;
+        }
+        
+    }
+
+    TAABCalendario &TAABCalendario::operator=(const TAABCalendario &tabb) const {
+        if(raiz == nullptr)  {
+            raiz = tabb.raiz;
+            raiz.de = tabb.raiz.de;
+            raiz.iz = tabb.raiz.iz;
+        }
+
+        this.Insertar(tabb.raiz.item);
+        do {
+            this.Insertar(tabb.raiz.iz.item);
+            this.Insertar(tabb.raiz.de.item);
+        } while()
+    }
+
+    bool operator==( TABBCalendario &tabb) {
+
+    }
+>>>>>>> abf49d7e635386f1debb3850f08effe8bf42bc66
     
 
 bool TABBCalendario::operator==(const TABBCalendario& abb) const {
@@ -147,9 +213,57 @@ bool TABBCalendario::Borrar(const TCalendario &cal){
             return true;
         }
 
+<<<<<<< HEAD
         else if(this->raiz->iz.EsVacio() && !this->raiz->de.EsVacio()){
             this->raiz = this->raiz->de.raiz;
             return true;
+=======
+        if(Buscar(cal)) return false;
+        TNodoABB *actual = new TNodoABB();
+        TNodoABB *nextNodo = new TNodoABB();
+        actual = raiz;
+                
+        do {
+            if(cal > actual.item) nextNodo = actual.de;
+            else if(cal < actual.item) nextNodo = actual.iz;
+        } while (nextNodo != nullptr);
+
+        if(cal > actual.item) actual.de.item = cal;
+        else actual.iz.item = cal;
+
+        return true; 
+
+    }
+
+    bool Borrar(TCalendario &cal) {
+        if(!Buscar(cal)) return false;
+
+    }
+
+    bool Buscar(TCalendario &cal) {
+        if(raiz == nullptr) return false;
+        if(raiz.item == cal) return true;
+        TNodoABB *nextNodo = new TNodoABB();
+        nextNodo = raiz;
+        do {
+            if(cal > nextNodo.item) nextNodo = nextNodo.de;
+            else if(cal < nextNodo.item) nextNodo = nextNodo.iz;
+            else return true;
+        } while (nextNodo != nullptr);
+
+        delete nextNodo;
+    
+        return false;
+    }
+     
+    TCalendario Raiz() {
+        return raiz.item;
+    }
+
+    int Altura() {
+        if(raiz = nullptr) {
+            return 0;
+>>>>>>> abf49d7e635386f1debb3850f08effe8bf42bc66
         }
 
         else if(!this->raiz->iz.EsVacio() && this->raiz->de.EsVacio()){
@@ -163,8 +277,40 @@ bool TABBCalendario::Borrar(const TCalendario &cal){
             this->raiz->iz.Borrar(izq);
         }
 
+<<<<<<< HEAD
         else return false;
 
+=======
+    int NodosHoja() {
+        if(raiz.de == nullptr && raiz.iz == nullptr) return 0;
+        if(raiz.de != nullptr && raiz.iz == nullptr) return raiz.de.NodosHoja();
+        else if(raiz.de == nullptr && raiz.iz != nullptr) return raiz.iz.NodosHoja();
+        else return raiz.de.NodosHoja() + raiz.iz.NodosHoja();
+    } 
+
+    TVectorCalendario Inorden() {
+        int posición = 1;
+        // Vector del tamaño adecuado para almacenar todos los nodos
+        TVectorCalendario v(Nodos());
+        InordenAux(v, posicion);
+        return v;
+    }
+
+    TVectorCalendario Preorden() {
+        int posición = 1;
+        // Vector del tamaño adecuado para almacenar todos los nodos
+        TVectorCalendario v(Nodos());
+        PreordenAux(v, posicion);
+        return v;
+    }
+
+    TVectorCalendario Postorden() {
+        int posición = 1;
+        // Vector del tamaño adecuado para almacenar todos los nodos
+        TVectorCalendario v(Nodos());
+        PreordenAux(v, posicion);
+        return v;
+>>>>>>> abf49d7e635386f1debb3850f08effe8bf42bc66
     }
 
     return false;
