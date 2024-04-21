@@ -11,7 +11,8 @@ class TNodoABB {
     friend class TABBCalendario;
     private:
         TCalendario item;
-        TABBCalendario iz, de;
+        TABBCalendario iz; 
+        TAABCalendario de;
 
     public:
         TNodoABB(); //HACHO
@@ -29,7 +30,13 @@ class TABBCalendario {
         void InordenAux(TVectorCalendario& v, int& pos) const;
         void PreordenAux(TVectorCalendario& v, int& pos) const;
         void PostordenAux(TVectorCalendario& v, int& pos) const;
+
+        void InordenAux(TVectorCalendario& v, int& pos, const TNodoABB* nodo) const;
+        void PreordenAux(TVectorCalendario& v, int& pos, const TNodoABB* nodo) const;
+        void PostordenAux(TVectorCalendario& v, int& pos, const TNodoABB* nodo) const;
+
         TNodoABB* CopiarSubarbol(TNodoABB* nodo) const;
+        TNodoABB* BuscarMayorIzquierda(TNodoABB* nodo) const;
         void BorrarSubarbol(TNodoABB* nodo);
 
     public:
