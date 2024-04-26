@@ -289,7 +289,7 @@ bool TCalendario::operator==(const TCalendario &tcalendario) {
 }
 
 bool TCalendario::operator!=(const TCalendario &tcalendario){
-    if(this->dia == tcalendario.dia && this->mes == tcalendario.mes && this->anyo == tcalendario.anyo && strcmp(this->mensaje, tcalendario.mensaje)) {
+    if(this->dia == tcalendario.dia && this->mes == tcalendario.mes && this->anyo == tcalendario.anyo && strcmp(this->mensaje, tcalendario.mensaje) == 0 ) {
         return false;
     }
     return true;

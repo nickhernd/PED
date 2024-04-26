@@ -30,7 +30,7 @@ public:
     bool Redimensionar(int);
 
     // OPERADORES
-    bool operator==(TVectorCalendario &);
+    bool operator==(const TVectorCalendario &);
     bool operator!=(TVectorCalendario &);
     TCalendario &operator[](int);
     TCalendario operator[](int) const;

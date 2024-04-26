@@ -30,7 +30,7 @@ class TABBCalendario {
         TABBCalendario & operator=(const TABBCalendario &);
 
         //OPERADORES
-        bool operator==(const TABBCalendario& abb) const;
+        bool operator==( TABBCalendario& abb) ;
         TABBCalendario operator+(const TABBCalendario& abb) const;
         TABBCalendario operator-(const TABBCalendario& abb) const;
         friend ostream& operator<<(ostream& os, const TABBCalendario& abb);
