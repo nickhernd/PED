@@ -215,7 +215,7 @@ bool TVectorCalendario::Redimensionar(int tam){
     }
 }
 
-ostream & operator<<(ostream & os, TVectorCalendario &tvector){
+ostream & operator<<(ostream & os,const TVectorCalendario &tvector){
     if(tvector.c == NULL) {
         os << "[]"; 
     } else {

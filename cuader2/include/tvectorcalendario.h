@@ -36,7 +36,7 @@ public:
     TCalendario operator[](int) const;
 
     // FUNCIONES AMIGAS
-    friend ostream &operator<<(ostream &, TVectorCalendario &);
+    friend ostream &operator<<(ostream &,const TVectorCalendario &);
 };
 
 #endif
