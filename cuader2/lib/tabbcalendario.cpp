@@ -4,51 +4,39 @@
 
 // TNodoABB
 
-TNodoABB::TNodoABB() : item(), iz(), de()
-{
+TNodoABB::TNodoABB() : item(), iz(), de() {}
 
-}
+TNodoABB::TNodoABB(const TNodoABB &tn) : item(tn.item), iz(tn.iz), de(tn.de) {}
 
-TNodoABB::TNodoABB(const TNodoABB &tn) : item(tn.item), iz(tn.iz), de(tn.de)
-{
+TNodoABB::~TNodoABB() {}
 
-}
-
-TNodoABB::~TNodoABB()
-{
-
-}
-
-TNodoABB & TNodoABB::operator=(const TNodoABB &tn)
-{
-    if(this != &tn){
+TNodoABB & TNodoABB::operator=(const TNodoABB &tnodo) {
+    if(this != &tnodo){
         this->~TNodoABB();
-        iz = tn.iz;
-        de = tn.de;
-        item = tn.item;
+        this->iz = tnodo.iz;
+        this->de = tnodo.de;
+        this->item = tnodo.item;
     }
     return *this;
 }
 
 // TABBCalendario
 
-bool TABBCalendario::EsVacio() const
-{
+bool TABBCalendario::EsVacio() const {
     return (raiz == NULL);
 }
 
-TCalendario TABBCalendario::Raiz() const
-{
+TCalendario TABBCalendario::Raiz() const {
     TCalendario aux;
 
     if(raiz != NULL){
         aux = raiz->item;
     }
+
     return aux;
 }
 
-void TABBCalendario::InordenAux(TVectorCalendario &tvec, int &pos) const
-{
+void TABBCalendario::InordenAux(TVectorCalendario &tvec, int &pos) const {
     if(raiz != NULL){
         (raiz->iz).InordenAux(tvec, pos);
         tvec[pos] = Raiz();
@@ -57,8 +45,7 @@ void TABBCalendario::InordenAux(TVectorCalendario &tvec, int &pos) const
     }
 }
 
-void TABBCalendario::PreordenAux(TVectorCalendario &tvec, int &pos) const
-{
+void TABBCalendario::PreordenAux(TVectorCalendario &tvec, int &pos) const {
     if(raiz != NULL){
         tvec[pos] = Raiz();
         pos++;
@@ -67,8 +54,7 @@ void TABBCalendario::PreordenAux(TVectorCalendario &tvec, int &pos) const
     }
 }
 
-void TABBCalendario::PostordenAux(TVectorCalendario &tvec, int &pos) const
-{
+void TABBCalendario::PostordenAux(TVectorCalendario &tvec, int &pos) const {
     if(raiz != NULL){
         (raiz->iz).PostordenAux(tvec, pos);
         (raiz->de).PostordenAux(tvec, pos);
@@ -77,22 +63,20 @@ void TABBCalendario::PostordenAux(TVectorCalendario &tvec, int &pos) const
     }
 }
 
-int TABBCalendario::Altura() const
-{
-    int a1 = 0, a2 = 0;
+int TABBCalendario::Altura() const {
+    int altura_iz = 0;
+    int altura_de = 0;
     
     if(EsVacio()){
         return 0;
-    }
-    else{
-        a1 = (raiz->iz).Altura();
-        a2 = (raiz->de).Altura();
-        return (1 + (a1 < a2 ? a2 : a1));
+    } else {
+        altura_iz = (raiz->iz).Altura();
+        altura_de = (raiz->de).Altura();
+        return (1 + max(altura_iz, altura_de));
     }
 }
 
-int TABBCalendario::Nodos() const
-{
+int TABBCalendario::Nodos() const {
     if(EsVacio()){
         return 0;
     }
@@ -101,16 +85,13 @@ int TABBCalendario::Nodos() const
     }
 }
 
-int TABBCalendario::NodosHoja() const
-{
+int TABBCalendario::NodosHoja() const {
     if(EsVacio()){
         return 0;
-    }
-    else{
+    } else {
         if((raiz->iz).EsVacio() && (raiz->de).EsVacio()){
             return 1;
-        }
-        else {
+        } else {
             return (raiz->iz).NodosHoja() + (raiz->de).NodosHoja();
         }
     }
@@ -126,8 +107,7 @@ bool TABBCalendario::Buscar(const TCalendario &cal) const
     }
     if(raiz->item == cal){
         return true;
-    }
-    else{
+    } else {
         return (raiz->iz).Buscar(cal) || (raiz->de).Buscar(cal);
     }
 }
@@ -186,11 +166,10 @@ bool TABBCalendario::Insertar(TCalendario &cal)
         insert = true;
     }
     else{
-        // Si el Calendario de la raiz es menor que el dado se procede con el hijo izquierdo.
         if(cal < raiz->item){
             insert = raiz->iz.Insertar(cal);
         }
-        else{ // proceder con el hijo derecho.
+        else{ 
             insert = raiz->de.Insertar(cal);
         }
     }
@@ -232,43 +211,43 @@ bool TABBCalendario::Borrar( TCalendario &cal)
     TCalendario mayorIz;
     TNodoABB *nodo;
 
-    if(EsVacio()){ // Si el arbol no existe, false.
+    if(EsVacio()){ 
         return false;
     }
 
-    if(cal < raiz->item){ // Si el calendario dado es menor
-        borrar = raiz->iz.Borrar(cal); // Buscamos por la izq
+    if(cal < raiz->item){ 
+        borrar = raiz->iz.Borrar(cal);
     }
-    else if(cal > raiz->item){ // Si el calendario dado es mayor
-        borrar = raiz->de.Borrar(cal); // Buscamos por la der
+    else if(cal > raiz->item){ 
+        borrar = raiz->de.Borrar(cal); 
     }
-    else{ // Si ya se encontró el calendario...
+    else{ 
         borrar = true;
-        // Si el calendario es la raiz y no tiene ni hijo izq ni der...
+
         if((raiz->iz).EsVacio() && (raiz->de).EsVacio()){
             delete raiz;
             raiz = NULL;
         }
-        // Si solo tiene hijo izq
+        
         else if(!(raiz->iz).EsVacio() && (raiz->de).EsVacio()){
             nodo = raiz;
-            raiz = (raiz->iz).raiz; // primero sustituimos el hijo izq
+            raiz = (raiz->iz).raiz; 
             nodo->iz.raiz = NULL;
-            delete nodo; // despues borramos
+            delete nodo; 
             nodo = NULL;
         }
-        // Si solo tiene hijo der
+
         else if((raiz->iz).EsVacio() && !(raiz->de).EsVacio()){
             nodo = raiz;
-            raiz = (raiz->de).raiz; // primero sustituimos el hijo der
+            raiz = (raiz->de).raiz; 
             nodo->de.raiz = NULL;
-            delete nodo; // despues borramos
+            delete nodo;
             nodo = NULL;
         }
-        // Tiene dos hijos (izq y der)
+        
         else{
-            mayorIz = raiz->iz.mayorIz(); // obtenemos el maximo hijo izq
-            raiz->item = mayorIz; // sustituimos
+            mayorIz = raiz->iz.mayorIz(); 
+            raiz->item = mayorIz; 
             borrar = raiz->iz.Borrar(mayorIz);
         }
     }
@@ -277,7 +256,6 @@ bool TABBCalendario::Borrar( TCalendario &cal)
 
 TVectorCalendario TABBCalendario::Inorden() const {
     int pos = 1;
-
     // Vector del tamaño adecuado para almacenar todos los nodos
     TVectorCalendario v(Nodos());
     InordenAux(v, pos);
@@ -287,7 +265,6 @@ TVectorCalendario TABBCalendario::Inorden() const {
 TVectorCalendario TABBCalendario::Preorden() const
 {
     int pos = 1;
-
     // Vector del tamaño adecuado para almacenar todos los nodos
     TVectorCalendario v(Nodos());
     PreordenAux(v, pos);
@@ -297,7 +274,6 @@ TVectorCalendario TABBCalendario::Preorden() const
 TVectorCalendario TABBCalendario::Postorden() const
 {
     int pos = 1;
-
     // Vector del tamaño adecuado para almacenar todos los nodos
     TVectorCalendario v(Nodos());
     PostordenAux(v, pos);
@@ -315,13 +291,13 @@ TVectorCalendario TABBCalendario::Niveles() const
         int pos = 1;
         queue<TABBCalendario> abbCOLA;
         TABBCalendario aux = (*this);
-        abbCOLA.push(aux); //encolar
+        abbCOLA.push(aux);
 
         while(!abbCOLA.empty()){
             aux = abbCOLA.front();
             v[pos] = aux.Raiz();
             pos++;
-            abbCOLA.pop(); //desencolar
+            abbCOLA.pop();
             if(!(aux.raiz->iz).EsVacio()){
                 abbCOLA.push(aux.raiz->iz);
             }
