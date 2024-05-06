@@ -5,7 +5,7 @@
 #include <string.h>
 #include "tvectorcalendario.h"
 
-class TNodoABB;
+class TNodoAVL;
 
 class TAVLCalendario {
     friend ostream & operator<<(ostream &,const TAVLCalendario);
@@ -13,7 +13,7 @@ class TAVLCalendario {
     private:
 
         // Puntero al nodo
-        TNodoABB *raiz;
+        TNodoAVL *raiz;
 
         void InordenAux(TVectorCalendario &, int &) const;
         void PreordenAux(TVectorCalendario &, int &) const;
@@ -31,6 +31,7 @@ class TAVLCalendario {
         TAVLCalendario & operator=(const TAVLCalendario &);
 
         bool operator==(const TAVLCalendario &);
+        bool operator!=(const TAVLCalendario &);
         bool EsVacio() const;
         bool Insertar(TCalendario &);
         bool Borrar( TCalendario &);
@@ -50,7 +51,7 @@ class TAVLCalendario {
         TAVLCalendario operator-(const TAVLCalendario &);
 };
 
-class TNodoABB
+class TNodoAVL
 {
     friend class TAVLCalendario;
 
@@ -58,13 +59,14 @@ class TNodoABB
 
         TCalendario item;
         TAVLCalendario iz, de;
+        int fe;
 
     public:
 
-        TNodoABB();
-        TNodoABB(const TNodoABB &);
-        ~TNodoABB();
-        TNodoABB & operator=(const TNodoABB &);
+        TNodoAVL();
+        TNodoAVL(const TNodoAVL &);
+        ~TNodoAVL();
+        TNodoAVL & operator=(const TNodoAVL &);
 };
 
 #endif

@@ -2,18 +2,19 @@
 #include <iostream>
 #include <queue>
 
-TNodoABB::TNodoABB() : item(), iz(), de() {}
+TNodoAVL::TNodoAVL() : item(), iz(), de(), fe() {}
 
-TNodoABB::TNodoABB(const TNodoABB &tn) : item(tn.item), iz(tn.iz), de(tn.de) {}
+TNodoAVL::TNodoAVL(const TNodoAVL &tnodo) : item(tnodo.item), iz(tnodo.iz), de(tnodo.de), fe(tnodo.fe) {}
 
-TNodoABB::~TNodoABB() {}
+TNodoAVL::~TNodoAVL() {}
 
-TNodoABB & TNodoABB::operator=(const TNodoABB &tnodo) {
+TNodoAVL & TNodoAVL::operator=(const TNodoAVL &tnodo) {
     if(this != &tnodo){
-        this->~TNodoABB();
+        this->~TNodoAVL();
         this->iz = tnodo.iz;
         this->de = tnodo.de;
         this->item = tnodo.item;
+        this->fe = tnodo.fe;
     }
     return *this;
 }
@@ -111,19 +112,19 @@ TAVLCalendario::TAVLCalendario() {
     raiz = NULL;
 }
 
-void TAVLCalendario::Copiar(const TAVLCalendario &tabb) {
-    if(tabb.raiz != NULL){
-        TNodoABB *aux = new TNodoABB();
-        aux->item = tabb.raiz->item;
+void TAVLCalendario::Copiar(const TAVLCalendario &tavl) {
+    if(tavl.raiz != NULL){
+        TNodoAVL *aux = new TNodoAVL();
+        aux->item = tavl.raiz->item;
         raiz = aux;
-        (raiz->iz).Copiar(tabb.raiz->iz);
-        (raiz->de).Copiar(tabb.raiz->de);
+        (raiz->iz).Copiar(tavl.raiz->iz);
+        (raiz->de).Copiar(tavl.raiz->de);
     }
     else raiz = NULL;
 }
 
-TAVLCalendario::TAVLCalendario(const TAVLCalendario &tabb) {
-    if(this != &tabb) Copiar(tabb);
+TAVLCalendario::TAVLCalendario(const TAVLCalendario &tavl) {
+    if(this != &tavl) Copiar(tavl);
 }
 
 TAVLCalendario::~TAVLCalendario() {
@@ -133,10 +134,10 @@ TAVLCalendario::~TAVLCalendario() {
     }
 }
 
-TAVLCalendario & TAVLCalendario::operator=(const TAVLCalendario &tabb) {
-    if(this != &tabb){
+TAVLCalendario & TAVLCalendario::operator=(const TAVLCalendario &tavl) {
+    if(this != &tavl){
         this->~TAVLCalendario();
-        Copiar(tabb);
+        Copiar(tavl);
     }
     return *this;
 }
@@ -149,7 +150,7 @@ bool TAVLCalendario::Insertar(TCalendario &cal) {
     }
 
     if(EsVacio()){
-        TNodoABB *nodo = new TNodoABB();
+        TNodoAVL *nodo = new TNodoAVL();
         raiz = nodo;
         raiz->item = cal;
         insert = true;
@@ -165,14 +166,19 @@ bool TAVLCalendario::Insertar(TCalendario &cal) {
     return insert;
 }
 
-bool TAVLCalendario::operator==(const TAVLCalendario &tabb) {
+bool TAVLCalendario::operator==(const TAVLCalendario &tavl) {
     TVectorCalendario vIZ = Inorden();
-    TVectorCalendario vDE = tabb.Inorden();
+    TVectorCalendario vDE = tavl.Inorden();
 
     if(vIZ == vDE){
         return true;
     }
     return false;
+}
+
+TAVLCalendario & TAVLCalendario::operator!=(const TAVLCalendario &tavl) {
+    if(this == tavl) return false;
+    return true;
 }
 
 TCalendario TAVLCalendario::mayorIz() {
@@ -195,7 +201,7 @@ TCalendario TAVLCalendario::mayorIz() {
 bool TAVLCalendario::Borrar( TCalendario &cal) {
     bool borrar = false;
     TCalendario mayorIz;
-    TNodoABB *nodo;
+    TNodoAVL *nodo;
 
     if(EsVacio()){ 
         return false;
@@ -292,9 +298,9 @@ TVectorCalendario TAVLCalendario::Niveles() const {
     return v;
 }
 
-TAVLCalendario TAVLCalendario::operator+(const TAVLCalendario &tabb) {
+TAVLCalendario TAVLCalendario::operator+(const TAVLCalendario &tavl) {
     TAVLCalendario aux(*this);
-    TVectorCalendario v = tabb.Inorden();
+    TVectorCalendario v = tavl.Inorden();
 
     for(int i = 1; i <= v.Tamano(); i++){
         aux.Insertar(v[i]);
@@ -302,19 +308,19 @@ TAVLCalendario TAVLCalendario::operator+(const TAVLCalendario &tabb) {
     return aux;
 }
 
-TAVLCalendario TAVLCalendario::operator-(const TAVLCalendario &tabb) {
+TAVLCalendario TAVLCalendario::operator-(const TAVLCalendario &tavl) {
     TAVLCalendario aux;
     TVectorCalendario v = Inorden();
 
     for(int i = 1; i <= v.Tamano(); i++){
-        if(!tabb.Buscar(v[i])){
+        if(!tavl.Buscar(v[i])){
             aux.Insertar(v[i]);
         }
     }
     return aux;
 }
 
-ostream& operator<<(ostream &os,TAVLCalendario &tabb) {
-    os << tabb.Inorden();
+ostream& operator<<(ostream &os,TAVLCalendario &tavl) {
+    os << tavl.Inorden();
     return os;
 }
