@@ -1,10 +1,12 @@
 #include <iostream>
 #include "tcalendario.h"
 
+// Función para comprobar si un año es bisiesto
 bool TCalendario::esBisiesto(int anyo)  {
     return ((anyo % 4 == 0 && anyo % 100 != 0) || (anyo % 400 == 0));
 }
 
+// Función para comprobar si una fecha es válida
 bool TCalendario::comprobarFecha(int dia, int mes, int anyo){
     if(dia > 0 && dia <= 31 && mes > 0 && mes <= 12 && anyo >= 1900){
 
@@ -23,6 +25,7 @@ bool TCalendario::comprobarFecha(int dia, int mes, int anyo){
     return false;
 }
 
+// Constructor por defecto de TCalendario
 TCalendario::TCalendario() {
     this->dia = 1;
     this->mes = 1;
@@ -30,6 +33,7 @@ TCalendario::TCalendario() {
     this->mensaje = NULL;
 }
 
+// Constructor de TCalendario con parámetros
 TCalendario::TCalendario(int dia, int mes, int anyo, char* mens) {
     if(comprobarFecha(dia, mes, anyo)){
         this->dia = dia;
@@ -49,6 +53,7 @@ TCalendario::TCalendario(int dia, int mes, int anyo, char* mens) {
     }
 }
 
+// Constructor de copia de TCalendario
 TCalendario::TCalendario(const TCalendario &tcalendario) {
     if(comprobarFecha(tcalendario.dia, tcalendario.mes, tcalendario.anyo)){
         this->dia = tcalendario.dia;    
@@ -70,6 +75,7 @@ TCalendario::TCalendario(const TCalendario &tcalendario) {
     }
 }
 
+// Operador de asignación de TCalendario
 TCalendario &TCalendario::operator=(const TCalendario &tcalendario) {
     if(this == &tcalendario) {
         return(*this);
@@ -94,6 +100,7 @@ TCalendario &TCalendario::operator=(const TCalendario &tcalendario) {
     return *this;
 }
 
+// Destructor de TCalendario
 TCalendario::~TCalendario(){
     this->dia = 1;
     this->mes = 1;
@@ -133,6 +140,7 @@ TCalendario TCalendario::operator+(int dias) {
     return tcalendario;
 }
 
+// Operador - para decrementar días
 TCalendario TCalendario::operator-(int dias)  {
     TCalendario tcalendario(*this);
     
@@ -147,12 +155,14 @@ TCalendario TCalendario::operator-(int dias)  {
     return tcalendario;
 }
 
+// Operador ++ postfijo
 TCalendario TCalendario::operator++(int cantDias){
     TCalendario tcalendario(*this);
     ++(*this);
     return tcalendario;
 }
 
+// Operador ++ prefijo
 TCalendario & TCalendario::operator++(){
     if(mes == 2){
         if(dia ==29 && esBisiesto(anyo)){
@@ -198,6 +208,7 @@ TCalendario & TCalendario::operator++(){
     return *this;
 }
 
+// Operador -- postfijo
 TCalendario TCalendario::operator--(int cantDias){
     TCalendario tcalendario(*this);
     dia--;
@@ -224,6 +235,7 @@ TCalendario TCalendario::operator--(int cantDias){
     return tcalendario;
 }
 
+// Operador -- prefijo
 TCalendario & TCalendario::operator--(){
     dia--;
     if(dia == 0){
@@ -249,6 +261,7 @@ TCalendario & TCalendario::operator--(){
     return *this;
 }
 
+// Función para comprobar si el calendario está vacío
 bool TCalendario::EsVacio() {
     if(this->dia == 1 && this->mes == 1 && this->anyo == 1900 && this->mensaje == NULL) {
         return true;
@@ -256,6 +269,7 @@ bool TCalendario::EsVacio() {
     return false;
 }
 
+// Función para modificar la fecha del calendario
 bool TCalendario::ModFecha(int dia, int mes, int anyo) {
     if(comprobarFecha(dia, mes, anyo)) {
         this->dia = dia; 
@@ -267,6 +281,7 @@ bool TCalendario::ModFecha(int dia, int mes, int anyo) {
     return false;
 }
 
+// Función para modificar el mensaje del calendario
 bool TCalendario::ModMensaje(char * mensaje){
 
     if(mensaje == NULL){
@@ -283,6 +298,7 @@ bool TCalendario::ModMensaje(char * mensaje){
     return false;
 }
 
+// Operador de igualdad
 bool TCalendario::operator==(const TCalendario &tcalendario) {
     if(this->dia == tcalendario.dia && this->mes == tcalendario.mes && this->anyo == tcalendario.anyo) {
         if(this->mensaje == NULL && tcalendario.mensaje == NULL) return true;
@@ -292,6 +308,7 @@ bool TCalendario::operator==(const TCalendario &tcalendario) {
     return false;
 }
 
+// Operador de desigualdad
 bool TCalendario::operator!=(const TCalendario &tcalendario){
     if(this->dia == tcalendario.dia && this->mes == tcalendario.mes && this->anyo == tcalendario.anyo && strcmp(this->mensaje, tcalendario.mensaje)) {
         return false;
@@ -299,6 +316,7 @@ bool TCalendario::operator!=(const TCalendario &tcalendario){
     return true;
 }
 
+// Operador de mayor que
 bool TCalendario::operator> (const TCalendario &tcalendario){
     if (this->anyo != tcalendario.anyo)
         return this->anyo > tcalendario.anyo;
@@ -321,12 +339,14 @@ bool TCalendario::operator> (const TCalendario &tcalendario){
     return false;
 }
 
+// Operador de menor que
 bool TCalendario::operator< ( const TCalendario &tcalendario){
     if((*this) == tcalendario)
         return false;
     else return !(*this > tcalendario);
 }
 
+// Operador de flujo de salida
 ostream &operator<<(ostream &os, const TCalendario &tcalendario){
 
     if(tcalendario.dia < 10)
