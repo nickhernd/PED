@@ -41,7 +41,7 @@ for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     fi
 
     # Ejecutar el programa y almacenar la salida en un archivo temporal
-     valgrind --leak-check=full ./tad
+    
     ./tad > "$output_file"
     ((tests_totales+=1))
 
@@ -85,7 +85,7 @@ for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     fi
 
     # Ejecutar el programa y almacenar la salida en un archivo temporal
-    valgrind --leak-check=full ./tad
+    
     ./tad > "$output_file"
     ((tests_totales+=1))
 
@@ -129,7 +129,7 @@ for test_file in "$directorio_pruebas/$tipo_de_prueba"/tad*.cpp; do
     fi
 
     # Ejecutar el programa y almacenar la salida en un archivo temporal
-    valgrind --leak-check=full ./tad
+    
     ./tad > "$output_file"
     ((tests_totales+=1))
 

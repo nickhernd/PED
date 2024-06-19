@@ -316,7 +316,7 @@ TABBCalendario TABBCalendario::operator-(const TABBCalendario &tabb) {
     return aux;
 }
 
-ostream& operator<<(ostream &os,TABBCalendario &tabb) {
-    os << tabb.Inorden();
+ostream& operator<<(ostream &os,const TABBCalendario &tabb) {
+    os << tabb.Niveles();
     return os;
 }
