@@ -321,7 +321,7 @@ Sobrecarga del operador salida
 \param c tipo TColaAVLCalendario con el objeto
 \return o devuelve un ostream
 */
-ostream& operator<<(ostream &os,TAVLCalendario &tavl) {
+ostream& operator<<(ostream &os,const TAVLCalendario &tavl) {
     os << tavl.Inorden();
     return os;
 }

@@ -92,7 +92,7 @@ class TAVLCalendario {
         /*! Funcion Raiz de la clase TAVLCalendario */
         TCalendario Raiz() const;
 
-        friend ostream& operator<<(ostream &,TAVLCalendario &);
+        friend ostream& operator<<(ostream &, const TAVLCalendario &);
 };
 
 //! Clase TNodoAVL
