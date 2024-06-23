@@ -287,57 +287,21 @@ Funcion que redimensiona un vector
 */
 bool TVectorCalendario::Redimensionar(int dim)
 {
-	bool retorno;
-	TCalendario *copia;
-	TCalendario copia2;
-	int tamant, i;
-	if(dim<=0 || dim == tamano)
-	{
-		retorno=false;
-	}
-	else
-	{
-		if(dim > tamano)
-		{
-			copia=new TCalendario [tamano];
-			for(i=0;i<tamano;i++)
-				copia[i]=c[i];
-			tamant = tamano;
-			tamano = dim;
-			c= new TCalendario [tamano];
-			i=0;
-			for(int j=0;j<tamant;j++)
-			{
-				c[j]=copia[i];
-				i++;
-			}
-			for(int k=tamant; k<tamano;k++)
-			{
-				c[k]=copia2;
-			}
-			retorno=true;
-		}
-		else
-		{
-			copia=new TCalendario [tamano];
-			//for(i=0;i<dim;i++)
-			//copia[i]=c[i];
-			for(int l=0; l<dim; l++)
-			{
-				copia[l]=c[l];
-			}
-			delete [] c;
-			c=NULL;
-			tamano = dim;
-			c= new TCalendario [tamano];
-			for(int m=0; m<dim; m++)
-			{
-				c[m]=copia[m];
-			}
-			retorno=true;
-		}
-	}
-	return retorno;
+    if (dim <= 0 || dim == tamano) return false;
+
+    TCalendario *nuevo = new TCalendario[dim];
+    if (!nuevo) return false;
+
+    int copiar = (dim < tamano) ? dim : tamano;
+    for (int i = 0; i < copiar; i++) {
+        nuevo[i] = c[i];
+    }
+
+    delete[] c;
+    c = nuevo;
+    tamano = dim;
+
+    return true;
 }
 
 //! Sobrecarga del operador salida

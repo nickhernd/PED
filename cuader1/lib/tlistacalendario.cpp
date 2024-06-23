@@ -306,81 +306,26 @@ Funcion que inserta un calendario en la lista
 */
 bool TListaCalendario::Insertar(const TCalendario &ca)
 {
-	bool retorno=true, insertado=false;
-	TNodoCalendario *nodo;
-	TListaPos auxp,auxp1;
-	auxp=Primera();
-	nodo=new TNodoCalendario();
-	if(!nodo) retorno=false;
-	else
-	{
-		nodo->c=ca;
-		if(primero==NULL)
-		{
-			primero=nodo;
-			nodo->siguiente=NULL;
-		}
-		else
-		{
-			if(primero->siguiente==NULL)
-			{
-				if(ca>auxp.pos->c)
-				{
-					auxp.pos->siguiente=nodo;
-					nodo->siguiente=NULL;
-					insertado=true;
-					retorno=true;
-				}
-				else
-					if(ca<auxp.pos->c)
-					{
-						primero=nodo;
-						nodo->siguiente=auxp.pos;
-						insertado=true;
-						retorno=true;
-					}
-			}
-			else
-			{
-				auxp1=auxp.Siguiente();
-				while(insertado==false && !auxp1.EsVacia())
-				{
-					if(ca>auxp.pos->c && ca<auxp1.pos->c)
-					{
-						auxp.pos->siguiente=nodo;
-						nodo->siguiente=auxp1.pos;
-						insertado=true;
-						retorno=true;
-					}
-					else
-					{
-						if(ca<auxp.pos->c && auxp==Primera())
-						{
-							primero=nodo;
-							nodo->siguiente=auxp.pos;
-							insertado=true;
-							retorno=true;
-						}
-						else
-						{
-							auxp=auxp.Siguiente();
-							auxp1=auxp1.Siguiente();
-						}
-					}
-				}
-				if(insertado==false)
-				{
-					if(ca>auxp.pos->c)
-					{
-						auxp.pos->siguiente=nodo;
-						nodo->siguiente=NULL;
-					}
-				}
-				
-			}
-		}
-	}
-	return (retorno);
+    TNodoCalendario *nuevo = new TNodoCalendario();
+    if (!nuevo) return false;
+
+    nuevo->c = ca;
+    nuevo->siguiente = nullptr;
+
+    if (EsVacia() || ca < primero->c) {
+        nuevo->siguiente = primero;
+        primero = nuevo;
+        return true;
+    }
+
+    TNodoCalendario *actual = primero;
+    while (actual->siguiente && actual->siguiente->c < ca) {
+        actual = actual->siguiente;
+    }
+
+    nuevo->siguiente = actual->siguiente;
+    actual->siguiente = nuevo;
+    return true;
 }
 
 //! Borrar calendario
