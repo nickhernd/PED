@@ -268,7 +268,7 @@ void TVectorCalendario::MostrarMensajes(int d,int m,int a)
 								if(d<=c[i].Dia())
 								{
 									cout<<c[i];
-									if(i!=tamano-1) cout<<",";
+									if(i!=tamano-1) cout<<", ";
 								}
 						}
 					}

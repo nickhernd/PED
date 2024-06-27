@@ -1,6 +1,6 @@
 #include<iostream>
 #include "tavlcalendario.h"
-
+#include "tlistacalendario.h"
 
 //! Constructor por defecto
 /*! 
@@ -314,6 +314,67 @@ int TColaAVLCalendario::Longitud()const
 	return retorno;
 }
 
+int* TAVLCalendario::BuscaAVL(TListaCalendario &lista)
+{
+    // Si la lista está vacía, devolver un puntero nulo
+    if (lista.EsVacia())
+        return NULL;
+
+    // Obtener el tamaño de la lista
+    int tamano = lista.Longitud();
+
+    // Crear el vector de resultados
+    int* resultado = new int[tamano];
+
+    // Si el árbol está vacío, llenar el vector con ceros y devolverlo
+    if (EsVacio())
+    {
+        for (int i = 0; i < tamano; i++)
+            resultado[i] = 0;
+        return resultado;
+    }
+
+    // Recorrer la lista y buscar cada elemento en el árbol
+    TListaPos pos = lista.Primera();
+    int indice = 0;
+    while (!pos.EsVacia())
+    {
+        TCalendario cal = lista.Obtener(pos);
+        resultado[indice] = BuscarYClasificar(cal);
+        pos = pos.Siguiente();
+        indice++;
+    }
+
+    return resultado;
+}
+
+// Función auxiliar para buscar un elemento y clasificarlo
+int TAVLCalendario::BuscarYClasificar(TCalendario &cal) const {
+    TNodoAVL *actual = raiz;
+    TNodoAVL *padre = NULL;
+
+    while (actual != NULL)
+    {
+        if (cal == actual->item)
+        {
+            if (padre == NULL)
+                return 3; // Es la raíz
+            else if (padre->iz.raiz == actual)
+                return 1; // Es hijo izquierdo
+            else
+                return 2; // Es hijo derecho
+        }
+        
+        padre = actual;
+        if (cal < actual->item)
+            actual = actual->iz.raiz;
+        else
+            actual = actual->de.raiz;
+    }
+
+    return 0; // No se encontró en el árbol
+}
+
 //! Sobrecarga del operador salida
 /*! 
 Sobrecarga del operador salida
@@ -321,7 +382,7 @@ Sobrecarga del operador salida
 \param c tipo TColaAVLCalendario con el objeto
 \return o devuelve un ostream
 */
-ostream& operator<<(ostream &os,TAVLCalendario &tavl) {
+ostream& operator<<(ostream &os,const TAVLCalendario &tavl) {
     os << tavl.Inorden();
     return os;
 }
@@ -488,13 +549,13 @@ TAVLCalendario::TAVLCalendario (const TAVLCalendario &c)
 /*! 
 Destructor que borra el arbol y pone el puntero raiz a null
 */
-TAVLCalendario::~TAVLCalendario ()
+TAVLCalendario::~TAVLCalendario()
 {
-	if(raiz!=NULL)
-	{
-		delete raiz;
-		raiz=NULL;
-	}
+    if (raiz != NULL)
+    {
+        delete raiz;
+        raiz = NULL;
+    }
 }
 
 //! Operador de asignacion
@@ -503,14 +564,21 @@ Sobrecarga del operador de asignacion
 \param c con el objeto a asignar
 \return *this el propio objeto
 */
-TAVLCalendario & TAVLCalendario::operator=(const TAVLCalendario &c) 
+TAVLCalendario& TAVLCalendario::operator=(const TAVLCalendario &c)
 {
-	this->~TAVLCalendario();
-	if(c.raiz!=NULL)
-	{
-		Copiar(c);
-	}
-	return (*this);
+    if (this != &c) // Evitar auto-asignación
+    {
+        this->~TAVLCalendario(); // Liberar memoria existente
+        if (c.raiz != NULL)
+        {
+            Copiar(c);
+        }
+        else
+        {
+            raiz = NULL;
+        }
+    }
+    return *this;
 }
 
 //! Operador igualdad

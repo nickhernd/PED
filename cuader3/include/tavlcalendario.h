@@ -4,6 +4,7 @@
 #include <iostream>
 #include "tcalendario.h"
 #include "tvectorcalendario.h"
+#include "tlistacalendario.h"
 
 using namespace std;
 
@@ -35,6 +36,9 @@ class TAVLCalendario {
         //! Copiar
         /*! Funcion privada Copiar */
         void Copiar(const TAVLCalendario &);
+
+        int BuscarYClasificar(TCalendario &) const;
+        TListaCalendario ConstruirCamino(const TCalendario &);
 
     public:
         //! Constructor
@@ -92,7 +96,10 @@ class TAVLCalendario {
         /*! Funcion Raiz de la clase TAVLCalendario */
         TCalendario Raiz() const;
 
-        friend ostream& operator<<(ostream &,TAVLCalendario &);
+        int* BuscaAVL (TListaCalendario &);
+        TListaCalendario Caminos_AVL(TVectorCalendario &);
+
+        friend ostream& operator<<(ostream &,const TAVLCalendario &);
 };
 
 //! Clase TNodoAVL
